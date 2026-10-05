@@ -62,6 +62,186 @@
         ],
         "count": 6
       }
+    },
+    "pizza_sauced": {
+      "image": "/assets/food/italian/pizza-sauced.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pasta_sauced": {
+      "image": "/assets/food/italian/pasta-sauced.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pizza_margherita": {
+      "image": "/assets/food/italian/pizza-margherita.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pizza_margherita_cut": {
+      "image": "/assets/food/italian/pizza-margherita-cut.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pizza_funghi": {
+      "image": "/assets/food/italian/pizza-funghi.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pizza_funghi_cut": {
+      "image": "/assets/food/italian/pizza-funghi-cut.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "dough_flat": {
+      "image": "/assets/food/italian/dough.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pasta_cooked": {
+      "image": "/assets/food/italian/spaghetti.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pancake": {
+      "image": "/assets/food/cafe/pancake.svg",
+      "plate": {
+        "size": 52,
+        "x": 0,
+        "y": 8,
+        "lift": 6
+      }
+    },
+    "patty": {
+      "image": "/assets/food/diner/patty.svg",
+      "plate": {
+        "size": 46,
+        "x": 0,
+        "y": 14,
+        "lift": 5
+      }
+    },
+    "potato_sticks": {
+      "image": "/assets/food/diner/potato-sticks.svg",
+      "plate": {
+        "size": 50,
+        "x": 0,
+        "y": 6,
+        "lift": 0
+      }
+    },
+    "fries": {
+      "image": "/assets/food/diner/fries.svg",
+      "plate": {
+        "size": 50,
+        "x": 0,
+        "y": 6,
+        "lift": 0
+      }
+    },
+    "chili_2": {
+      "image": "/assets/food/thai/chili-2.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "chili_3": {
+      "image": "/assets/food/thai/chili-3.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "paste_1": {
+      "image": "/assets/food/thai/paste-1.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "paste_2": {
+      "image": "/assets/food/thai/paste-2.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "paste_3": {
+      "image": "/assets/food/thai/paste-3.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "som_tam_thai": {
+      "image": "/assets/food/thai/som-tam-thai.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "som_tam_thai_no_peanuts": {
+      "image": "/assets/food/thai/som-tam-thai-no-peanuts.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "som_tam_poo": {
+      "image": "/assets/food/thai/som-tam-poo.svg",
+      "plate": {
+        "size": 80,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
     }
   },
   "merges": [
@@ -85,18 +265,246 @@
         "ikura"
       ],
       "into": "gunkan_ikura"
+    },
+    {
+      "from": [
+        "dough_flat",
+        "tomato_sauce"
+      ],
+      "into": "pizza_sauced"
+    },
+    {
+      "from": [
+        "pasta_cooked",
+        "tomato_sauce"
+      ],
+      "into": "pasta_sauced"
+    },
+    {
+      "from": [
+        "chili",
+        "chili"
+      ],
+      "into": "chili_2"
+    },
+    {
+      "from": [
+        "chili_2",
+        "chili"
+      ],
+      "into": "chili_3"
     }
   ],
-  "roll": {
-    "base": "rice_on_nori",
-    "fillings": {
-      "salmon": "roll_salmon",
-      "avocado": "roll_veg",
-      "cucumber": "roll_veg"
+  "actions": {
+    "roll": {
+      "base": "rice_on_nori",
+      "fillings": {
+        "salmon": "roll_salmon",
+        "avocado": "roll_veg",
+        "cucumber": "roll_veg"
+      },
+      "game": {
+        "type": "hold",
+        "seconds": 1.2,
+        "prompt": "Hold to roll it up tight"
+      }
+    },
+    "stretch": {
+      "map": {
+        "dough": "dough_flat"
+      },
+      "game": {
+        "type": "hold",
+        "seconds": 1.4,
+        "prompt": "Hold to stretch the dough"
+      }
+    },
+    "boil": {
+      "map": {
+        "spaghetti": "pasta_cooked"
+      },
+      "game": {
+        "type": "timing",
+        "seconds": 3.2,
+        "prompt": "Boil the pasta",
+        "stop": "Drain it!",
+        "zones": [
+          {
+            "to": 50,
+            "label": "Hard",
+            "quality": "under"
+          },
+          {
+            "to": 78,
+            "label": "Al dente",
+            "quality": "perfect"
+          },
+          {
+            "to": 100,
+            "label": "Soggy",
+            "quality": "over"
+          }
+        ]
+      }
+    },
+    "bake": {
+      "base": "pizza_sauced",
+      "fillings": {
+        "mushroom": "pizza_funghi",
+        "mozzarella": "pizza_margherita"
+      },
+      "game": {
+        "type": "timing",
+        "seconds": 3,
+        "prompt": "Bake the pizza",
+        "stop": "Take it out!",
+        "zones": [
+          {
+            "to": 52,
+            "label": "Raw",
+            "quality": "under"
+          },
+          {
+            "to": 80,
+            "label": "Golden",
+            "quality": "perfect"
+          },
+          {
+            "to": 100,
+            "label": "Burnt",
+            "quality": "over"
+          }
+        ]
+      }
+    },
+    "pound": {
+      "base": "garlic",
+      "fillings": {
+        "chili_3": "paste_3",
+        "chili_2": "paste_2",
+        "chili": "paste_1"
+      },
+      "game": {
+        "type": "pound",
+        "taps": 10,
+        "seconds": 3,
+        "prompt": "Tap fast to pound the garlic and chili!"
+      }
+    },
+    "toss": {
+      "base": [
+        "paste_1",
+        "paste_2",
+        "paste_3"
+      ],
+      "fillings": {
+        "salted_crab": "som_tam_poo",
+        "peanuts": "som_tam_thai",
+        "dried_shrimp": "som_tam_thai_no_peanuts"
+      },
+      "game": {
+        "type": "hold",
+        "seconds": 1.4,
+        "prompt": "Hold to pound and mix everything together"
+      }
+    },
+    "flip": {
+      "map": {
+        "batter": "pancake"
+      },
+      "game": {
+        "type": "timing",
+        "seconds": 3,
+        "prompt": "Cook the pancake",
+        "stop": "Flip it!",
+        "zones": [
+          {
+            "to": 50,
+            "label": "Pale",
+            "quality": "under"
+          },
+          {
+            "to": 78,
+            "label": "Golden",
+            "quality": "perfect"
+          },
+          {
+            "to": 100,
+            "label": "Burnt",
+            "quality": "over"
+          }
+        ]
+      }
+    },
+    "grill": {
+      "map": {
+        "patty_raw": "patty"
+      },
+      "game": {
+        "type": "timing",
+        "seconds": 3,
+        "prompt": "Grill the patty",
+        "stop": "Take it off!",
+        "zones": [
+          {
+            "to": 50,
+            "label": "Raw",
+            "quality": "under"
+          },
+          {
+            "to": 78,
+            "label": "Juicy",
+            "quality": "perfect"
+          },
+          {
+            "to": 100,
+            "label": "Burnt",
+            "quality": "over"
+          }
+        ]
+      }
+    },
+    "fry": {
+      "map": {
+        "potato_sticks": "fries"
+      },
+      "game": {
+        "type": "timing",
+        "seconds": 3,
+        "prompt": "Fry the potatoes",
+        "stop": "Lift the basket!",
+        "zones": [
+          {
+            "to": 50,
+            "label": "Pale",
+            "quality": "under"
+          },
+          {
+            "to": 78,
+            "label": "Crispy",
+            "quality": "perfect"
+          },
+          {
+            "to": 100,
+            "label": "Burnt",
+            "quality": "over"
+          }
+        ]
+      }
+    },
+    "cut": {
+      "map": {
+        "roll_salmon": "cut_salmon",
+        "roll_veg": "cut_veg",
+        "pizza_margherita": "pizza_margherita_cut",
+        "pizza_funghi": "pizza_funghi_cut",
+        "potato": "potato_sticks"
+      },
+      "game": {
+        "type": "slice",
+        "marks": 3,
+        "prompt": "Tap when the knife is over each mark"
+      }
     }
-  },
-  "cut": {
-    "roll_salmon": "cut_salmon",
-    "roll_veg": "cut_veg"
   }
 }

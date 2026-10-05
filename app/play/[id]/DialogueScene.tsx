@@ -26,6 +26,7 @@ export interface Customer {
   name: string;
   spriteColumn: number; // column in /assets/food/sushi/4.png (0 = chef)
   gender?: "male" | "female";
+  dialogue?: string; // dialogue tree id in dialogues.json (defaults to the restaurant id)
 }
 
 type Expression = "happy" | "neutral" | "upset";
@@ -36,6 +37,7 @@ interface DialogueSceneProps {
   node: DialogueNode;
   customer: Customer;
   customerMood: number;
+  background?: string; // dining room picture; the sushi bar when not given
   onChoose: (choice: DialogueChoice) => void;
   onFinish: () => void;
 }
@@ -106,7 +108,7 @@ function feedbackStyle(moodChange: number) {
   return { label: "Could be better", box: "bg-red-50 border-red-300", text: "text-red-700", badge: "bg-red-500" };
 }
 
-export default function DialogueScene({ nodeId, node, customer, customerMood, onChoose, onFinish }: DialogueSceneProps) {
+export default function DialogueScene({ nodeId, node, customer, customerMood, background = "/assets/food/sushi/5.png", onChoose, onFinish }: DialogueSceneProps) {
   const [typed, setTyped] = useState({ nodeId: "", count: 0 });
   const [picked, setPicked] = useState<{ nodeId: string; choice: DialogueChoice } | null>(null);
   const [openWord, setOpenWord] = useState<string | null>(null);
@@ -203,7 +205,7 @@ export default function DialogueScene({ nodeId, node, customer, customerMood, on
   return (
     <div className="flex flex-col h-screen pt-20 relative overflow-hidden bg-stone-900" onClick={() => setOpenWord(null)}>
       {/* Restaurant interior with warm, flickering lantern light */}
-      <div className="absolute inset-0 bg-[url('/assets/food/sushi/5.png')] bg-cover bg-center bg-no-repeat" />
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${background}')` }} />
       <motion.div
         className="absolute inset-0 pointer-events-none mix-blend-soft-light"
         style={{ background: "radial-gradient(circle at 12% 12%, rgba(255,160,80,0.7), transparent 25%), radial-gradient(circle at 88% 12%, rgba(255,160,80,0.7), transparent 25%), radial-gradient(circle at 50% 30%, rgba(255,200,120,0.4), transparent 40%)" }}

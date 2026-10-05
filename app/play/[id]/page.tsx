@@ -3,23 +3,42 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameplayStore, MOOD_HAPPY, MOOD_OK } from "@/lib/gameplayStore";
+import { useGameplayStore, MOOD_HAPPY, MOOD_OK, isBadStep, type StepQuality } from "@/lib/gameplayStore";
 import { useGameStore } from "@/lib/store";
 import restaurantsData from "@/data/restaurants.json";
 import dialoguesData from "@/data/dialogues.json";
 import recipesData from "@/data/recipes.json";
 import ingredientsData from "@/data/ingredients.json";
 import { Star, ArrowLeft, Trash2, Check, Undo2, X } from "lucide-react";
-import { PlateStack, DishPreview } from "./Dish";
+import { PlateStack, DishPreview, gameFor, stepChangesPlate } from "./Dish";
+import MiniGame from "./MiniGame";
 import DialogueScene, { type Customer, type DialogueChoice } from "./DialogueScene";
+
+// Where a level takes place: the dining room behind the counter, the prep counter, and what the food sits on.
+interface Picture { image: string; size: string; position: string }
+interface Scene { dining: string; counter: string; mat?: Picture; plate: Picture }
+const SUSHI_SCENE: Scene = {
+  dining: "/assets/food/sushi/5.png",
+  counter: "/assets/food/sushi/6.png",
+  mat: { image: "/assets/food/sushi/8.png", size: "300% 200%", position: "0% 100%" },
+  plate: { image: "/assets/food/sushi/8.png", size: "300% 200%", position: "50% 100%" },
+};
+const pictureStyle = (p: Picture): React.CSSProperties => ({ backgroundImage: `url('${p.image}')`, backgroundSize: p.size, backgroundPosition: p.position, backgroundRepeat: "no-repeat" });
 
 // What the customer says while watching you cook, based on the latest step.
 const GOOD_LINES = ["Looks good!", "Nice!", "Mm, I can't wait!"];
-function customerReaction(steps: string[], sequence: string[], complete: boolean) {
+const QUALITY_LINES: Partial<Record<NonNullable<StepQuality>, string>> = {
+  under: "Hmm, it looks a bit undercooked.",
+  over: "Oh no... is it burnt?",
+  bad: "Those pieces look a bit uneven.",
+};
+function customerReaction(steps: string[], sequence: string[], complete: boolean, quality: StepQuality[]) {
   if (steps.length === 0) return null;
   const key = steps.length;
-  if (complete) return { key, tone: "good", text: "Wow, that looks delicious!" };
   const last = steps.length - 1;
+  const q = quality[last];
+  if (q && QUALITY_LINES[q]) return { key, tone: "bad", text: QUALITY_LINES[q]! };
+  if (complete) return { key, tone: "good", text: "Wow, that looks delicious!" };
   if (steps[last] !== sequence[last]) return { key, tone: "bad", text: "Hmm? I don't think that's right." };
   return { key, tone: "good", text: GOOD_LINES[last % GOOD_LINES.length] };
 }
@@ -30,17 +49,28 @@ export default function PlayScreen() {
   const restaurantId = params.id as string;
   
   const restaurant = restaurantsData.find(r => r.id === restaurantId);
-  const dialogueTree = (dialoguesData as any)[restaurantId];
   const { 
-    phase, currentNodeId, customerMood, score, assembledIngredients, currentRecipeId,
-    startGame, makeChoice, addIngredient, removeLastIngredient, clearIngredients, serveFood, resetGame 
+    phase, currentNodeId, customerMood, score, assembledIngredients, stepQuality, currentRecipeId, customerIndex, served,
+    startGame, makeChoice, addIngredient, removeLastIngredient, clearIngredients, serveFood, nextCustomer, showSummary, resetGame 
   } = useGameplayStore();
+
+  // A level serves its customers one after another; older levels still list a single "customer".
+  const customers: Customer[] = restaurant
+    ? (restaurant as { customers?: Customer[] }).customers ?? [(restaurant as { customer?: Customer }).customer ?? { name: "Customer", spriteColumn: 2 }]
+    : [];
+  const customer = customers[customerIndex] ?? customers[0];
+  const dialogueTree = customer ? (dialoguesData as any)[customer.dialogue ?? restaurantId] : null;
+  const isLastCustomer = customerIndex >= customers.length - 1;
+  const scene = (restaurant as { scene?: Scene } | undefined)?.scene ?? SUSHI_SCENE;
+  const kitchen = (restaurant as { kitchen?: string } | undefined)?.kitchen ?? "sushi";
+  const totalStars = served.length ? Math.round(served.reduce((sum, o) => sum + o.stars, 0) / served.length) : 0;
 
   const recipe = currentRecipeId ? (recipesData as any)[currentRecipeId] : null;
 
   const { completeLevel } = useGameStore();
   const [mounted, setMounted] = useState(false);
   const [added, setAdded] = useState<{ key: number; verb: string; name: string } | null>(null);
+  const [playing, setPlaying] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -66,8 +96,8 @@ export default function PlayScreen() {
   };
 
   const handleFinish = () => {
-    if (score > 0) {
-      completeLevel(restaurantId, score);
+    if (totalStars > 0) {
+      completeLevel(restaurantId, totalStars);
     }
     router.push("/select");
   };
@@ -81,7 +111,7 @@ export default function PlayScreen() {
         </button>
         <div className="min-w-0">
           <h2 className="font-luckiest-guy text-lg md:text-2xl text-white tracking-wider drop-shadow-md truncate">{restaurant.name}</h2>
-          <p className="text-xs font-black tracking-widest text-orange-300 uppercase drop-shadow-md">Phase: {phase}</p>
+          <p className="text-xs font-black tracking-widest text-orange-300 uppercase drop-shadow-md">Guest {customerIndex + 1} of {customers.length} · {customer.name}</p>
         </div>
       </div>
       
@@ -104,9 +134,11 @@ export default function PlayScreen() {
 
     return (
       <DialogueScene
+        key={customerIndex}
         nodeId={currentNodeId}
         node={currentDialogue}
-        customer={(restaurant as { customer?: Customer }).customer ?? { name: "Customer", spriteColumn: 2 }}
+        customer={customer}
+        background={scene.dining}
         customerMood={customerMood}
         onChoose={handleChoice}
         onFinish={() => makeChoice("", 0, currentDialogue.action, currentDialogue.recipeId)}
@@ -116,18 +148,21 @@ export default function PlayScreen() {
 
   const renderCooking = () => {
     if (!recipe) return null;
-    const customerColumn = (restaurant as { customer?: Customer }).customer?.spriteColumn ?? 2;
+    const customerColumn = customer.spriteColumn;
+    const waiting = customers.slice(customerIndex + 1);
     const extras: string[] = assembledIngredients.slice(recipe.correctSequence.length);
-    const tools = ingredientsData.filter((i) => "action" in i && i.action);
-    const foods = ingredientsData.filter((i) => !("action" in i && i.action));
+    // Only this restaurant's ingredients and tools; items without a kitchen (like Cut) work everywhere.
+    const inKitchen = ingredientsData.filter((i) => !("kitchen" in i) || !i.kitchen || i.kitchen === kitchen);
+    const tools = inKitchen.filter((i) => "action" in i && i.action);
+    const foods = inKitchen.filter((i) => !("action" in i && i.action));
     const isComplete = JSON.stringify(assembledIngredients) === JSON.stringify(recipe.correctSequence);
-    const reaction = customerReaction(assembledIngredients, recipe.correctSequence, isComplete);
+    const reaction = customerReaction(assembledIngredients, recipe.correctSequence, isComplete, stepQuality);
 
     return (
       <div className="flex flex-col h-screen relative overflow-hidden bg-stone-900">
         {/* Across the counter: the dining room, with the customer seated behind the counter's edge */}
         <div className="relative h-[30vh] md:h-[34vh] shrink-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/assets/food/sushi/5.png')] bg-cover bg-no-repeat" style={{ backgroundPosition: "center 28%" }} />
+          <div className="absolute inset-0 bg-cover bg-no-repeat" style={{ backgroundImage: `url('${scene.dining}')`, backgroundPosition: "center 28%" }} />
           <motion.div
             className="absolute inset-0 pointer-events-none mix-blend-soft-light"
             style={{ background: "radial-gradient(circle at 15% 20%, rgba(255,160,80,0.7), transparent 30%), radial-gradient(circle at 85% 20%, rgba(255,160,80,0.7), transparent 30%)" }}
@@ -155,6 +190,21 @@ export default function PlayScreen() {
               transition={reaction ? { duration: 0.5 } : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
+          {/* Guests still waiting for their turn, further down the bar */}
+          {waiting.length > 0 && (
+            <div className="hidden md:flex absolute bottom-0 right-[3%] h-[60%] items-end gap-1 translate-y-[14%]">
+              {waiting.map((c) => (
+                <motion.div
+                  key={c.name}
+                  className="h-full aspect-[3/4] brightness-90 drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)]"
+                  style={{ backgroundImage: "url('/assets/food/sushi/4.png')", backgroundSize: "400% 300%", backgroundPosition: `${c.spriteColumn * 33.333}% 50%`, backgroundRepeat: "no-repeat" }}
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 3 + c.spriteColumn * 0.4, repeat: Infinity, ease: "easeInOut" }}
+                />
+              ))}
+            </div>
+          )}
+
           {/* What the customer says about each step */}
           <AnimatePresence>
             {reaction && (
@@ -176,7 +226,7 @@ export default function PlayScreen() {
 
         {/* Prep counter, seen from above */}
         <div className="relative flex-1 min-h-0">
-          <div className="absolute inset-0 bg-[url('/assets/food/sushi/6.png')] bg-cover bg-center bg-no-repeat" />
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${scene.counter}')` }} />
           <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black/45 to-transparent pointer-events-none" />
 
           {/* Undo / Discard / Serve, at the right edge of the counter */}
@@ -209,20 +259,17 @@ export default function PlayScreen() {
           {/* Center Area: Bamboo Mat + Plate */}
           <div className="absolute inset-x-0 top-2 bottom-[232px] md:bottom-[168px] flex items-center justify-center pointer-events-none">
           <div className="relative h-full max-h-[min(480px,90vw)] aspect-square flex items-center justify-center">
-            {/* Bamboo Mat */}
-            <div 
-              className="absolute w-full h-full z-0 drop-shadow-2xl"
-              style={{ backgroundImage: "url('/assets/food/sushi/8.png')", backgroundSize: "300% 200%", backgroundPosition: "0% 100%" }}
-            />
+            {/* Mat under the plate (bamboo for sushi, a checked cloth for pizza) */}
+            {scene.mat && <div className="absolute w-full h-full z-0 drop-shadow-2xl" style={pictureStyle(scene.mat)} />}
             
             {/* The Plate */}
             <div 
               className="relative w-[110%] h-[110%] z-10 drop-shadow-2xl flex items-center justify-center -translate-y-4"
-              style={{ backgroundImage: "url('/assets/food/sushi/8.png')", backgroundSize: "300% 200%", backgroundPosition: "50% 100%", backgroundRepeat: "no-repeat" }}
+              style={pictureStyle(scene.plate)}
             >
               {/* Ingredients stack in the order they were added; a matching plate becomes the finished dish */}
               <div className="absolute inset-0 -translate-y-[11%]">
-                <PlateStack ids={assembledIngredients} final={recipe.final} complete={isComplete} />
+                <PlateStack ids={assembledIngredients} quality={stepQuality} final={recipe.final} complete={isComplete} />
                 {/* Name of what was just added floats up, so hidden layers (like wasabi under fish) still register */}
                 {added && (
                   <motion.div
@@ -252,7 +299,7 @@ export default function PlayScreen() {
             </button>
             <div className="min-w-0">
               <h2 className="font-luckiest-guy text-lg md:text-3xl text-white tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] truncate">{restaurant.name}</h2>
-              <p className="text-[10px] md:text-sm whitespace-nowrap font-black tracking-widest text-orange-400 uppercase drop-shadow-md">Phase: Cooking</p>
+              <p className="text-[10px] md:text-sm whitespace-nowrap font-black tracking-widest text-orange-400 uppercase drop-shadow-md">Guest {customerIndex + 1} of {customers.length} · Cooking</p>
             </div>
           </div>
           
@@ -275,51 +322,65 @@ export default function PlayScreen() {
           </div>
         </div>
 
-        {/* Order ticket clipped to the ticket rail */}
-        <div className="absolute top-[68px] md:top-[100px] left-0 w-[62%] md:w-[34%] h-1.5 bg-gradient-to-b from-stone-300 to-stone-500 rounded-r-full shadow-md z-40" />
-        <motion.div
-          initial={{ rotate: -12, y: -20, opacity: 0 }}
-          animate={{ rotate: -2, y: 0, opacity: 1 }}
-          transition={{ type: "spring", bounce: 0.5 }}
-          style={{ transformOrigin: "50% 0%" }}
-          className="absolute top-[64px] md:top-[96px] left-3 md:left-8 w-[56%] md:w-auto md:min-w-[240px] bg-[#fffdf7] px-3 pt-4 pb-2 md:px-6 md:pt-6 md:pb-4 rounded-b-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] border-l-8 border-orange-500 z-40 flex flex-col"
-        >
-           <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-10 h-3 bg-stone-700 rounded-sm shadow" />
-           <div className="flex items-center gap-2 mb-1 md:mb-2">
-             <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-             <h3 className="font-luckiest-guy text-[10px] md:text-sm text-stone-400 tracking-wider uppercase">Order Ticket</h3>
-           </div>
-           <p className="font-black text-sm md:text-2xl leading-tight text-stone-800 border-b-2 border-dashed border-stone-200 pb-1 mb-1 md:pb-2 md:mb-2">{recipe.targetDishName}</p>
-
-           {/* Steps: chips on phones, a checklist on larger screens */}
-           <div className="flex flex-wrap md:flex-col gap-1">
-             {recipe.correctSequence.map((ingId: string, idx: number) => {
-               const ing = ingredientsData.find((i) => i.id === ingId);
-               const placed = assembledIngredients[idx];
-               const isDone = placed === ingId;
-               const isWrong = placed !== undefined && !isDone;
-               return (
-                 <div key={idx} className={`flex items-center gap-1 md:gap-2 rounded-full md:rounded-none px-1.5 py-0.5 md:p-0 ${isDone ? 'bg-green-50 md:bg-transparent' : isWrong ? 'bg-red-50 md:bg-transparent' : 'bg-stone-100 md:bg-transparent'}`}>
-                   <div className={`w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${isDone ? 'bg-green-500 border-green-600' : isWrong ? 'bg-red-500 border-red-600' : 'border-stone-300'}`}>
-                     {isDone && <Check size={10} className="text-white" strokeWidth={4} />}
-                     {isWrong && <X size={10} className="text-white" strokeWidth={4} />}
+        {/* Order tickets clipped to the ticket rail: the current one first, then the ones already served */}
+        <div className="absolute top-[64px] md:top-[96px] left-3 md:left-8 right-3 md:right-auto flex items-start gap-3 z-40 pointer-events-none">
+          <div className="absolute top-[68px] md:top-[100px] left-0 w-[62%] md:w-[48%] h-1.5 bg-gradient-to-b from-stone-300 to-stone-500 rounded-r-full shadow-md z-40" />
+          <motion.div
+            initial={{ rotate: -12, y: -20, opacity: 0 }}
+            animate={{ rotate: -2, y: 0, opacity: 1 }}
+            transition={{ type: "spring", bounce: 0.5 }}
+            style={{ transformOrigin: "50% 0%" }}
+            className="relative w-[56%] md:w-auto md:min-w-[240px] md:max-w-[280px] shrink-0 bg-[#fffdf7] px-3 pt-4 pb-2 md:px-6 md:pt-6 md:pb-4 rounded-b-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] border-l-8 border-orange-500 z-40 flex flex-col"
+          >
+             <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-10 h-3 bg-stone-700 rounded-sm shadow" />
+             <div className="flex items-center gap-2 mb-1 md:mb-2">
+               <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+               <h3 className="font-luckiest-guy text-[10px] md:text-sm text-stone-400 tracking-wider uppercase">Order Ticket</h3>
+             </div>
+             <p className="font-black text-sm md:text-2xl leading-tight text-stone-800 border-b-2 border-dashed border-stone-200 pb-1 mb-1 md:pb-2 md:mb-2">{recipe.targetDishName}</p>
+  
+             {/* Steps: chips on phones, a checklist on larger screens */}
+             <div className="flex flex-wrap md:flex-col gap-1">
+               {recipe.correctSequence.map((ingId: string, idx: number) => {
+                 const ing = ingredientsData.find((i) => i.id === ingId);
+                 const placed = assembledIngredients[idx];
+                 const isDone = placed === ingId;
+                 const isWrong = placed !== undefined && !isDone;
+                 return (
+                   <div key={idx} className={`flex items-center gap-1 md:gap-2 rounded-full md:rounded-none px-1.5 py-0.5 md:p-0 ${isDone ? 'bg-green-50 md:bg-transparent' : isWrong ? 'bg-red-50 md:bg-transparent' : 'bg-stone-100 md:bg-transparent'}`}>
+                     <div className={`w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${isDone ? 'bg-green-500 border-green-600' : isWrong ? 'bg-red-500 border-red-600' : 'border-stone-300'}`}>
+                       {isDone && <Check size={10} className="text-white" strokeWidth={4} />}
+                       {isWrong && <X size={10} className="text-white" strokeWidth={4} />}
+                     </div>
+                     <span className={`text-[10px] md:text-sm font-bold whitespace-nowrap ${isDone ? 'text-stone-400 line-through' : isWrong ? 'text-red-600' : 'text-stone-700'}`}>
+                       {ing?.name || ingId}
+                     </span>
                    </div>
-                   <span className={`text-[10px] md:text-sm font-bold whitespace-nowrap ${isDone ? 'text-stone-400 line-through' : isWrong ? 'text-red-600' : 'text-stone-700'}`}>
-                     {ing?.name || ingId}
-                   </span>
+                 );
+               })}
+               {extras.map((ingId, idx) => (
+                 <div key={`extra-${idx}`} className="flex items-center gap-1 md:gap-2 rounded-full md:rounded-none px-1.5 py-0.5 md:p-0 bg-red-50 md:bg-transparent">
+                   <div className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 rounded-full border-2 bg-red-500 border-red-600 flex items-center justify-center">
+                     <X size={10} className="text-white" strokeWidth={4} />
+                   </div>
+                   <span className="text-[10px] md:text-sm font-bold whitespace-nowrap text-red-600">Extra: {ingredientsData.find((i) => i.id === ingId)?.name || ingId}</span>
                  </div>
-               );
-             })}
-             {extras.map((ingId, idx) => (
-               <div key={`extra-${idx}`} className="flex items-center gap-1 md:gap-2 rounded-full md:rounded-none px-1.5 py-0.5 md:p-0 bg-red-50 md:bg-transparent">
-                 <div className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 rounded-full border-2 bg-red-500 border-red-600 flex items-center justify-center">
-                   <X size={10} className="text-white" strokeWidth={4} />
-                 </div>
-                 <span className="text-[10px] md:text-sm font-bold whitespace-nowrap text-red-600">Extra: {ingredientsData.find((i) => i.id === ingId)?.name || ingId}</span>
-               </div>
-             ))}
-           </div>
-        </motion.div>
+               ))}
+             </div>
+          </motion.div>
+            {/* Tickets already served stay on the rail, stamped */}
+            {served.map((o, i) => (
+              <div key={i} className="hidden md:block relative w-32 shrink-0 bg-[#fffdf7] rounded-b-lg shadow-lg px-3 pt-4 pb-3 rotate-2">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-2 bg-stone-700 rounded-sm" />
+                <p className="text-[11px] font-black text-stone-400 uppercase truncate">{customers[i]?.name}</p>
+                <p className="text-xs font-bold text-stone-700 leading-tight">{(recipesData as any)[o.recipeId]?.targetDishName}</p>
+                <div className="flex mt-1">
+                  {[0, 1, 2].map((s) => <Star key={s} size={13} className={s < o.stars ? "text-yellow-400 fill-yellow-400" : "text-stone-300 fill-stone-200"} />)}
+                </div>
+                <span className={`inline-block mt-1 -rotate-6 border-2 rounded px-1 text-[10px] font-black ${o.stars > 0 ? "border-green-600 text-green-600" : "border-red-600 text-red-600"}`}>{o.stars > 0 ? "SERVED" : "MISSED"}</span>
+              </div>
+            ))}
+        </div>
 
         {/* Ingredients Bar (Bottom) - Now shows ALL possible ingredients! */}
         <div className="absolute bottom-0 inset-x-0 h-40 bg-stone-900/80 backdrop-blur-md border-t border-white/10 px-4 md:px-8 py-6 z-30 flex items-center gap-4 md:gap-6 overflow-x-auto custom-scrollbar">
@@ -329,6 +390,12 @@ export default function PlayScreen() {
                 <button
                   key={ing.id}
                   onClick={() => {
+                    // Steps like Bake or Cut open their mini-game when they would actually change the food.
+                    const game = ing.action ? gameFor(ing.id) : undefined;
+                    if (game && stepChangesPlate(assembledIngredients, ing.id)) {
+                      setPlaying({ id: ing.id, name: ing.name });
+                      return;
+                    }
                     addIngredient(ing.id);
                     setAdded({ key: Date.now(), verb: ing.action ? "" : "+", name: ing.name });
                   }}
@@ -346,11 +413,33 @@ export default function PlayScreen() {
             </div>
           ))}
         </div>
+
+        {playing && gameFor(playing.id) && (
+          <MiniGame
+            key={`${playing.id}-${assembledIngredients.length}`}
+            game={gameFor(playing.id)!}
+            name={playing.name}
+            onCancel={() => setPlaying(null)}
+            onDone={(quality: StepQuality, label: string) => {
+              addIngredient(playing.id, quality);
+              setAdded({ key: Date.now(), verb: "", name: `${playing.name}: ${label}` });
+              setPlaying(null);
+            }}
+          />
+        )}
       </div>
     );
   };
 
-  const renderResult = () => (
+  // How each cooking step went, for the guest card.
+  const QUALITY_TEXT: Record<string, string> = { perfect: "Perfect", ok: "Good", under: "Undercooked", over: "Overcooked", bad: "Messy" };
+  const cookingNotes = assembledIngredients.flatMap((id, i) => {
+    const q = stepQuality[i];
+    if (!q) return [];
+    return [{ step: ingredientsData.find((ing) => ing.id === id)?.name ?? id, text: QUALITY_TEXT[q], bad: isBadStep(q) }];
+  });
+
+  const renderServing = () => (
     <div className="flex flex-col h-screen bg-[#FFF8E7] items-center justify-center p-6 relative overflow-hidden">
        {/* Burst background */}
        <div className="absolute inset-0 z-0 flex items-center justify-center">
@@ -400,16 +489,102 @@ export default function PlayScreen() {
            ))}
          </div>
          
+         {score > 0 && cookingNotes.length > 0 && (
+           <div className="flex flex-wrap justify-center gap-2 -mt-4 mb-6">
+             {cookingNotes.map((n, i) => (
+               <span key={i} className={`px-3 py-1 rounded-full text-sm font-bold ${n.bad ? "bg-red-50 text-red-600" : "bg-green-50 text-green-700"}`}>
+                 {n.step}: {n.text}{n.bad ? " (−1★)" : ""}
+               </span>
+             ))}
+           </div>
+         )}
+
          <p className="text-xl text-stone-600 font-sans font-medium mb-12">
-           {score === 3 ? "Perfect order! The customer loved it." : 
-            score === 2 ? "Good job! But it could be better." : 
-            score === 1 ? "Barely passed... They were not impressed." : 
-            "You messed up the order! Try again."}
+           <span className="font-bold text-stone-700">{customer.name}: </span>
+           {score === 3 ? "\u201cPerfect! Thank you so much!\u201d" : 
+            score === 2 ? "\u201cThank you, it's good.\u201d" : 
+            score === 1 ? "\u201cHmm... it's OK, I guess.\u201d" : 
+            "\u201cExcuse me, this isn't what I ordered.\u201d"}
          </p>
          
          <button 
-           onClick={handleFinish}
+           onClick={isLastCustomer ? showSummary : nextCustomer}
            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-luckiest-guy text-3xl px-8 py-5 rounded-full shadow-[0_8px_0_#C2410C] hover:shadow-[0_4px_0_#C2410C] hover:translate-y-1 transition-all"
+         >
+           {isLastCustomer ? "SEE RESULTS" : "NEXT GUEST"}
+         </button>
+       </motion.div>
+    </div>
+  );
+
+  // Every ticket of the night, then the level's overall stars.
+  const renderResult = () => (
+    <div className="flex flex-col min-h-screen bg-[#FFF8E7] items-center justify-center p-4 md:p-6 relative overflow-hidden">
+       <div className="absolute inset-0 z-0 flex items-center justify-center">
+         <motion.div 
+           animate={{ rotate: 360 }} 
+           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+           className="w-[150vw] h-[150vw] bg-[conic-gradient(from_0deg,#FFF8E7_0deg,#FFEDD5_30deg,#FFF8E7_60deg,#FFEDD5_90deg,#FFF8E7_120deg,#FFEDD5_150deg,#FFF8E7_180deg,#FFEDD5_210deg,#FFF8E7_240deg,#FFEDD5_270deg,#FFF8E7_300deg,#FFEDD5_330deg,#FFF8E7_360deg)]" 
+         />
+       </div>
+
+       <motion.div 
+         initial={{ scale: 0.8, opacity: 0 }}
+         animate={{ scale: 1, opacity: 1 }}
+         className="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-2xl border-8 border-white text-center z-10 max-w-3xl w-full"
+       >
+         <h2 className="text-4xl md:text-6xl font-luckiest-guy text-[#FFB800] tracking-wider drop-shadow-[0_4px_0_#8B4513] mb-6" style={{ WebkitTextStroke: '2px #5C2A0A' }}>
+           {totalStars > 0 ? "SERVICE DONE!" : "OH NO!"}
+         </h2>
+
+         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+           {served.map((o, i) => {
+             const dish = (recipesData as any)[o.recipeId];
+             const guest = customers[i];
+             return (
+               <motion.div
+                 key={i}
+                 initial={{ y: 30, opacity: 0, rotate: -4 }}
+                 animate={{ y: 0, opacity: 1, rotate: i % 2 ? 2 : -2 }}
+                 transition={{ delay: 0.15 + i * 0.15, type: "spring", bounce: 0.5 }}
+                 className="relative w-[46%] md:w-48 bg-[#fffdf7] border-l-8 border-orange-500 rounded-b-xl shadow-lg px-3 pt-5 pb-3 text-left"
+               >
+                 <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-10 h-3 bg-stone-700 rounded-sm" />
+                 <div className="flex items-center gap-2 mb-1">
+                   <div className="w-9 h-9 rounded-full bg-orange-50 shrink-0" style={{ backgroundImage: "url('/assets/food/sushi/4.png')", backgroundSize: "400% 300%", backgroundPosition: `${(guest?.spriteColumn ?? 2) * 33.333}% ${o.stars >= 2 ? 0 : o.stars === 1 ? 50 : 100}%` }} />
+                   <p className="font-black text-sm text-stone-700 truncate">{guest?.name}</p>
+                 </div>
+                 {dish?.final && o.stars > 0 && (
+                   <div className="w-full h-20">
+                     <DishPreview final={dish.final} />
+                   </div>
+                 )}
+                 <p className="text-xs font-bold text-stone-500 leading-tight">{dish?.targetDishName}</p>
+                 <div className="flex mt-1">
+                   {[0, 1, 2].map((s) => <Star key={s} size={18} className={s < o.stars ? "text-yellow-400 fill-yellow-400" : "text-stone-200 fill-stone-200"} />)}
+                 </div>
+                 <span className={`absolute bottom-3 right-2 -rotate-12 border-2 rounded px-1 text-[10px] font-black ${o.stars > 0 ? "border-green-600 text-green-600" : "border-red-600 text-red-600"}`}>{o.stars > 0 ? "SERVED" : "MISSED"}</span>
+               </motion.div>
+             );
+           })}
+         </div>
+
+         <div className="flex justify-center gap-3 md:gap-4 mb-8">
+           {[...Array(3)].map((_, i) => (
+             <motion.div
+               key={i}
+               initial={{ opacity: 0, y: 50, rotate: -45 }}
+               animate={{ opacity: 1, y: 0, rotate: 0 }}
+               transition={{ delay: 0.6 + (i * 0.2), type: "spring", bounce: 0.6 }}
+             >
+               <Star size={56} className={i < totalStars ? "text-yellow-400 fill-yellow-400 drop-shadow-md" : "text-stone-200 fill-stone-200"} />
+             </motion.div>
+           ))}
+         </div>
+
+         <button 
+           onClick={handleFinish}
+           className="w-full max-w-md bg-orange-500 hover:bg-orange-600 text-white font-luckiest-guy text-3xl px-8 py-5 rounded-full shadow-[0_8px_0_#C2410C] hover:shadow-[0_4px_0_#C2410C] hover:translate-y-1 transition-all"
          >
            CONTINUE
          </button>
@@ -420,7 +595,7 @@ export default function PlayScreen() {
   return (
     <main className="min-h-screen bg-stone-50 font-sans selection:bg-amber-200">
       {/* Do NOT render HUD during cooking to avoid overlapping headers */}
-      {phase !== 'result' && phase !== 'cooking' && renderHUD()}
+      {phase === 'dialogue' && renderHUD()}
       
       <AnimatePresence mode="wait">
         {phase === 'dialogue' && (
@@ -435,6 +610,12 @@ export default function PlayScreen() {
           </motion.div>
         )}
         
+        {phase === 'serving' && (
+          <motion.div key={`serving-${customerIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-screen">
+            {renderServing()}
+          </motion.div>
+        )}
+
         {phase === 'result' && (
           <motion.div key="result" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-screen">
             {renderResult()}

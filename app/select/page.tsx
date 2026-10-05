@@ -64,7 +64,7 @@ export default function SelectScreen() {
               {/* Avatar Box with pop-out image */}
               <div className="relative w-16 h-16 bg-amber-400 rounded-xl border-4 border-white flex items-end justify-center shadow-inner mt-2 z-10">
                  <img 
-                    src={profile.avatar?.face || "/assets/avatars/avatar1.png"} 
+                    src={profile.avatar?.face?.startsWith("/") ? profile.avatar.face : "/assets/avatars/avatar1.png"} 
                     alt="Player Avatar"
                     className="absolute bottom-0 w-[150%] max-w-none object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] select-none" 
                  />

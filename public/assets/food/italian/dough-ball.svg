@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><defs>
+<radialGradient id="dough" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#f8e6bf"/><stop offset="1" stop-color="#e6c48a"/></radialGradient>
+<radialGradient id="crustBaked" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#eab36a"/><stop offset="1" stop-color="#c47a35"/></radialGradient>
+<radialGradient id="sauce" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#e8502f"/><stop offset="1" stop-color="#b52a18"/></radialGradient>
+<radialGradient id="sauceBaked" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#d4462a"/><stop offset="1" stop-color="#9c2414"/></radialGradient>
+<radialGradient id="cheese" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="#efe3c6"/></radialGradient>
+<radialGradient id="cheeseBaked" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#f1c76d"/></radialGradient>
+<radialGradient id="bowl" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dcd6cc"/></radialGradient>
+<linearGradient id="pasta" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7dc8a"/><stop offset="1" stop-color="#e2b955"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9a066"/><stop offset="1" stop-color="#b47740"/></linearGradient>
+</defs><ellipse cx="256" cy="304" rx="96" ry="30" fill="#000" opacity=".18"/><path d="M 164 300 C 156 230, 216 198, 256 198 C 308 198, 360 234, 348 300 C 326 322, 186 322, 164 300 Z" fill="url(#dough)" stroke="#4A2A14" stroke-width="5"/><path d="M 206 234 C 226 216, 256 212, 278 216" stroke="#fff" stroke-width="9" fill="none" opacity=".6" stroke-linecap="round"/></svg>

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import ingredientsData from "@/data/ingredients.json";
+import type { StepQuality } from "@/lib/gameplayStore";
 import assemblyData from "@/data/assembly.json";
 
 type Cell = number[]; // [column, row] in the 4x4 sheet /assets/food/sushi/1.png
@@ -19,6 +20,7 @@ interface Pieces {
   sprite?: Cell;
   image?: string;
   count: number;
+  size?: number; // width of each piece on the plate (%), when the picture needs to be bigger or smaller
 }
 
 export type Final = Pieces;
@@ -26,10 +28,28 @@ export type Final = Pieces;
 interface Ingredient {
   id: string;
   name: string;
-  sprite?: Cell;
+  sprite?: Cell; // cell in the sushi sheet, or…
+  image?: string; // …a picture of its own
   plate?: PlateLayout;
-  action?: boolean; // a step such as Roll or Cut, not something placed on the plate
+  action?: boolean; // a step such as Roll, Bake or Cut, not something placed on the plate
 }
+
+// A step that changes what is already on the plate.
+// With "base": the base (or any of several) and everything on it become one dish, picked by the first filling found (Roll, Bake, Pound).
+// With "map": the top layer turns into its mapped result (Cut).
+interface Action {
+  base?: string | string[];
+  fillings?: Record<string, string>;
+  map?: Record<string, string>;
+  game?: MiniGame;
+}
+
+// The mini-game played when the step is used (see MiniGame.tsx).
+export type MiniGame =
+  | { type: "timing"; seconds: number; prompt: string; stop: string; zones: { to: number; label: string; quality: StepQuality }[] }
+  | { type: "hold"; seconds: number; prompt: string }
+  | { type: "slice"; marks: number; prompt: string }
+  | { type: "pound"; taps: number; seconds: number; prompt: string };
 
 interface Composite {
   image?: string;
@@ -41,8 +61,7 @@ const ingredients = ingredientsData as Ingredient[];
 const assembly = assemblyData as {
   composites: Record<string, Composite>;
   merges: { from: string[]; into: string }[];
-  roll: { base: string; fillings: Record<string, string> };
-  cut: Record<string, string>;
+  actions: Record<string, Action>;
 };
 
 // Food on the plate is drawn a bit larger than the raw layout numbers so it fills the plate.
@@ -57,36 +76,54 @@ export function spriteCell([col, row]: Cell): React.CSSProperties {
   };
 }
 
-type Visual = { id: string; plate: PlateLayout; sprite?: Cell; image?: string; pieces?: Pieces };
+type Visual = { id: string; plate: PlateLayout; sprite?: Cell; image?: string; pieces?: Pieces; filter?: string; messy?: boolean };
+
+// Under- or overcooked food is drawn paler or darker.
+const COOKED_LOOK: Partial<Record<NonNullable<StepQuality>, string>> = {
+  under: "saturate(0.65) brightness(1.08)",
+  over: "brightness(0.6) sepia(0.5) saturate(1.4)",
+};
+
+export const gameFor = (id: string) => assembly.actions[id]?.game;
+
+// Whether using a step right now would change the food (e.g. Bake only works on a sauced pizza).
+export function stepChangesPlate(ids: string[], id: string) {
+  const ids1 = buildPlate(ids).map((l) => l.id).join();
+  return ids1 !== buildPlate([...ids, id]).map((l) => l.id).join();
+}
 
 function visualFor(id: string): Visual | null {
   const comp = assembly.composites[id];
   if (comp) return { id, plate: comp.plate ?? { size: 0, x: 0, y: 0, lift: 0 }, image: comp.image, pieces: comp.pieces };
   const ing = ingredients.find((i) => i.id === id);
-  return ing?.plate ? { id, plate: ing.plate, sprite: ing.sprite } : null;
+  return ing?.plate ? { id, plate: ing.plate, sprite: ing.sprite, image: ing.image } : null;
 }
 
-// Replays what the player did and works out what is physically on the plate:
+// Replays what the player did and works out what is physically on the plate, e.g.
 // nori + rice sheet become one sheet, Roll turns the sheet and its fillings into a roll, Cut slices it.
-function buildPlate(ids: string[]): Visual[] {
+function buildPlate(ids: string[], quality: StepQuality[] = []): Visual[] {
   const layers: Visual[] = [];
   const topIndex = () => layers.findLastIndex((l) => !l.plate.side);
 
-  for (const id of ids) {
-    if (id === "roll") {
-      const baseAt = layers.findIndex((l) => l.id === assembly.roll.base);
+  for (const [step, id] of ids.entries()) {
+    const action = assembly.actions[id];
+    const q = quality[step] ?? null;
+    if (action?.base) {
+      const bases = ([] as string[]).concat(action.base);
+      const baseAt = layers.findIndex((l) => bases.includes(l.id));
       if (baseAt === -1) continue;
-      const fillings = layers.slice(baseAt + 1).filter((l) => !l.plate.side);
-      const into = fillings.map((f) => assembly.roll.fillings[f.id]).find(Boolean);
+      const on = layers.slice(baseAt + 1).filter((l) => !l.plate.side).map((l) => l.id);
+      const into = Object.entries(action.fillings ?? {}).find(([filling]) => on.includes(filling))?.[1];
       if (!into) continue;
       const sides = layers.filter((l, i) => i < baseAt || l.plate.side);
-      layers.splice(0, layers.length, ...sides, visualFor(into)!);
+      const made = { ...visualFor(into)!, filter: (q && COOKED_LOOK[q]) || layers[baseAt].filter };
+      layers.splice(0, layers.length, ...sides, made);
       continue;
     }
-    if (id === "cut") {
+    if (action?.map) {
       const at = topIndex();
-      const into = at >= 0 ? assembly.cut[layers[at].id] : undefined;
-      if (into) layers[at] = visualFor(into)!;
+      const into = at >= 0 ? action.map[layers[at].id] : undefined;
+      if (into) layers[at] = { ...visualFor(into)!, filter: (q && COOKED_LOOK[q]) || layers[at].filter, messy: q === "bad" };
       continue;
     }
 
@@ -94,7 +131,7 @@ function buildPlate(ids: string[]): Visual[] {
     if (!next) continue;
     const at = topIndex();
     const merge = at >= 0 && !next.plate.side && assembly.merges.find((m) => m.from[0] === layers[at].id && m.from[1] === id);
-    if (merge) layers[at] = visualFor(merge.into)!;
+    if (merge) layers[at] = { ...visualFor(merge.into)!, filter: layers[at].filter };
     else layers.push(next);
   }
   return layers;
@@ -122,12 +159,12 @@ function layoutStack(layers: Visual[]) {
   });
 }
 
-function Art({ visual }: { visual: { sprite?: Cell; image?: string } }) {
+function Art({ visual }: { visual: { sprite?: Cell; image?: string; filter?: string } }) {
   if (visual.image) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={visual.image} alt="" draggable={false} className="w-full h-auto select-none" />;
+    return <img src={visual.image} alt="" draggable={false} className="w-full h-auto select-none" style={{ filter: visual.filter }} />;
   }
-  return <div className="w-full aspect-square" style={spriteCell(visual.sprite!)} />;
+  return <div className="w-full aspect-square" style={{ ...spriteCell(visual.sprite!), filter: visual.filter }} />;
 }
 
 // Positions and centres a layer. The centring lives on this plain wrapper, not inside the
@@ -150,20 +187,21 @@ const PIECE_SPOTS: Record<number, number[][]> = {
   6: [[-22, -9, -4], [0, -11, 0], [22, -9, 4], [-22, 11, -4], [0, 9, 0], [22, 11, 4]],
 };
 
-export function ServedPieces({ pieces, size, spread = 1.12, offsetY = 0, delay = 0 }: { pieces: Pieces; size?: number; spread?: number; offsetY?: number; delay?: number }) {
+export function ServedPieces({ pieces, size, spread = 1.12, offsetY = 0, delay = 0, filter, messy = false }: { pieces: Pieces; size?: number; spread?: number; offsetY?: number; delay?: number; filter?: string; messy?: boolean }) {
   const spots = PIECE_SPOTS[pieces.count] ?? PIECE_SPOTS[1];
-  const width = size ?? (pieces.count >= 6 ? 30 : 44);
+  const width = size ?? pieces.size ?? (pieces.count >= 6 ? 30 : pieces.count === 1 ? 86 : 44);
   return (
     <>
       {spots.map(([x, y, r], i) => (
-        <Spot key={i} left={50 + x * spread} top={50 + offsetY + y * spread} width={width} z={40 + Math.round(y)} rotate={r}>
+        // Badly cut pieces come out crooked and uneven.
+        <Spot key={i} left={50 + x * spread + (messy ? ((i * 37) % 7) - 3 : 0)} top={50 + offsetY + y * spread + (messy ? ((i * 53) % 5) - 2 : 0)} width={width * (messy ? 0.85 + ((i * 29) % 4) * 0.08 : 1)} z={40 + Math.round(y)} rotate={r + (messy ? ((i * 41) % 25) - 12 : 0)}>
           <motion.div
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: delay + i * 0.06, type: "spring", bounce: 0.5 }}
             className={SHADOW}
           >
-            <Art visual={pieces} />
+            <Art visual={{ ...pieces, filter }} />
           </motion.div>
         </Spot>
       ))}
@@ -195,16 +233,30 @@ function KnifeChop() {
 }
 
 // Live plate in the kitchen. Once the plate matches the recipe, it is served as the finished dish.
-export function PlateStack({ ids, final, complete }: { ids: string[]; final?: Final; complete: boolean }) {
-  const layers = buildPlate(ids);
+export function PlateStack({ ids, quality, final, complete }: { ids: string[]; quality: StepQuality[]; final?: Final; complete: boolean }) {
+  const layers = buildPlate(ids, quality);
   const placed = layoutStack(layers);
-  const justCut = ids[ids.length - 1] === "cut" && layers.some((l) => l.pieces);
-  const uncut = justCut ? layoutStack(buildPlate(ids.slice(0, -1))).find((l) => l.visual.id.startsWith("roll_")) : undefined;
+  const lastId = ids[ids.length - 1];
+  const before = lastId && assembly.actions[lastId] ? layoutStack(buildPlate(ids.slice(0, -1), quality)) : [];
+  const changed = before.length > 0 && before[before.length - 1].visual.id !== placed[placed.length - 1]?.visual.id;
+  const justCut = lastId === "cut" && changed;
+  const justBaked = lastId === "bake" && changed;
+  const uncut = justCut ? before.findLast((l) => !l.visual.plate.side) : undefined;
   const showFinal = complete && !!final;
+  const top = layers.findLast((l) => !l.plate.side);
 
   return (
     <div className="absolute inset-0">
       {justCut && <KnifeChop key={`knife-${ids.length}`} />}
+      {justBaked && (
+        <motion.div
+          key={`oven-${ids.length}`}
+          className="absolute inset-[-10%] z-[55] pointer-events-none rounded-full bg-[radial-gradient(circle,rgba(255,170,60,0.85),rgba(255,90,20,0.35)_45%,transparent_70%)]"
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: [0, 1, 0.8, 0], scale: [0.6, 1.05, 1, 1.1] }}
+          transition={{ duration: 1.1 }}
+        />
+      )}
       {uncut && (
         <Spot key={`uncut-${ids.length}`} left={uncut.left} top={uncut.top} width={uncut.width} z={20}>
           <motion.div
@@ -222,12 +274,16 @@ export function PlateStack({ ids, final, complete }: { ids: string[]; final?: Fi
           placed.map(({ key, visual, top, left, width, z }) =>
             visual.pieces ? (
               <motion.div key={key} className="absolute inset-0" style={{ zIndex: z }} exit={{ opacity: 0 }}>
-                <ServedPieces pieces={visual.pieces} offsetY={PIECES_ON_PLATE_Y} delay={CHOP_MS / 1000} />
+                <ServedPieces pieces={visual.pieces} offsetY={PIECES_ON_PLATE_Y} delay={CHOP_MS / 1000} filter={visual.filter} messy={visual.messy} />
               </motion.div>
             ) : (
               <Spot key={key} left={left} top={top} width={width} z={z}>
                 <motion.div
-                  initial={visual.id.startsWith("roll_") ? { opacity: 0, scaleY: 0.3 } : { y: -200, opacity: 0, scale: 0.5, rotate: -15 }}
+                  initial={
+                    lastId && assembly.actions[lastId] && key === placed[placed.length - 1].key
+                      ? lastId === "roll" ? { opacity: 0, scaleY: 0.3 } : { opacity: 0, scale: 0.92 }
+                      : { y: -200, opacity: 0, scale: 0.5, rotate: -15 }
+                  }
                   animate={{ y: 0, opacity: 1, scale: 1, scaleY: 1, rotate: 0 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ type: "spring", bounce: 0.45, duration: 0.6 }}
@@ -245,7 +301,7 @@ export function PlateStack({ ids, final, complete }: { ids: string[]; final?: Fi
               animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.95, 1.05, 0.95] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <ServedPieces pieces={final!} offsetY={PIECES_ON_PLATE_Y} delay={justCut ? CHOP_MS / 1000 : 0} />
+            <ServedPieces pieces={final!} offsetY={PIECES_ON_PLATE_Y} delay={justCut ? CHOP_MS / 1000 : 0} filter={top?.filter} messy={top?.messy} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -257,7 +313,7 @@ export function PlateStack({ ids, final, complete }: { ids: string[]; final?: Fi
 export function DishPreview({ final }: { final: Final }) {
   return (
     <div className="relative w-full h-full">
-      <ServedPieces pieces={final} size={final.count >= 6 ? 38 : 56} spread={final.count >= 6 ? 1.5 : 1.4} />
+      <ServedPieces pieces={final} size={final.count >= 6 ? 38 : final.count === 1 ? (final.size ?? 86) * 0.8 : 56} spread={final.count >= 6 ? 1.5 : 1.4} />
     </div>
   );
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><defs>
+<radialGradient id="dough" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#f8e6bf"/><stop offset="1" stop-color="#e6c48a"/></radialGradient>
+<radialGradient id="crustBaked" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#eab36a"/><stop offset="1" stop-color="#c47a35"/></radialGradient>
+<radialGradient id="sauce" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#e8502f"/><stop offset="1" stop-color="#b52a18"/></radialGradient>
+<radialGradient id="sauceBaked" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#d4462a"/><stop offset="1" stop-color="#9c2414"/></radialGradient>
+<radialGradient id="cheese" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="#efe3c6"/></radialGradient>
+<radialGradient id="cheeseBaked" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#f1c76d"/></radialGradient>
+<radialGradient id="bowl" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dcd6cc"/></radialGradient>
+<linearGradient id="pasta" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7dc8a"/><stop offset="1" stop-color="#e2b955"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9a066"/><stop offset="1" stop-color="#b47740"/></linearGradient>
+
+<radialGradient id="noodle" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#f6ecd2"/><stop offset="1" stop-color="#e2d2a8"/></radialGradient>
+<radialGradient id="padthai" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#f0a85a"/><stop offset="1" stop-color="#cf7a35"/></radialGradient>
+<radialGradient id="mango" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#ffd84d"/><stop offset="1" stop-color="#f29a1f"/></radialGradient>
+<radialGradient id="bun" cx="45%" cy="30%" r="80%"><stop offset="0" stop-color="#f2b866"/><stop offset="1" stop-color="#c47a2f"/></radialGradient>
+<radialGradient id="patty" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#7a4a2c"/><stop offset="1" stop-color="#4a2814"/></radialGradient>
+<radialGradient id="pattyRaw" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#e8848a"/><stop offset="1" stop-color="#b9505a"/></radialGradient>
+<radialGradient id="pancake" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#f5c77a"/><stop offset="1" stop-color="#d48d3c"/></radialGradient>
+<radialGradient id="batter" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#fff4d6"/><stop offset="1" stop-color="#f0dca8"/></radialGradient>
+<radialGradient id="fries" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffd970"/><stop offset="1" stop-color="#e3a531"/></radialGradient>
+</defs><ellipse cx="226" cy="280" rx="170" ry="110" fill="#333" stroke="#4A2A14" stroke-width="6"/><ellipse cx="226" cy="276" rx="140" ry="86" fill="#4a4a4a"/><rect x="380" y="262" width="120" height="30" rx="14" fill="#6e4524" stroke="#4A2A14" stroke-width="5"/><g transform="translate(226 250) scale(.5)"><ellipse cx="0" cy="22" rx="190" ry="60" fill="#000" opacity=".14"/><path d="M -190 0 C -190 40, 190 40, 190 0 L 190 -14 L -190 -14 Z" fill="#b8742c" stroke="#4A2A14" stroke-width="5"/><ellipse cx="0" cy="-14" rx="190" ry="58" fill="url(#pancake)" stroke="#4A2A14" stroke-width="5"/><circle cx="-80" cy="-24" r="5" fill="#c58035" opacity=".6"/><circle cx="40" cy="-2" r="5" fill="#c58035" opacity=".6"/><circle cx="100" cy="-34" r="5" fill="#c58035" opacity=".6"/><circle cx="-20" cy="-44" r="5" fill="#c58035" opacity=".6"/><circle cx="-120" cy="0" r="5" fill="#c58035" opacity=".6"/></g></svg>
