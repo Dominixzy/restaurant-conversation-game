@@ -1,0 +1,317 @@
+{
+  "r1": {
+    "start": {
+      "text": "Good evening. Do you have a table for one?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Good evening! Yes, right this way. Here is the menu.",
+          "next": "menu",
+          "moodChange": 1
+        },
+        {
+          "text": "Yeah, just sit anywhere.",
+          "next": "menu",
+          "moodChange": -1
+        }
+      ]
+    },
+    "menu": {
+      "text": "Thank you. I'm quite hungry, but I'm not very familiar with Japanese food. What do you recommend?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Our Salmon Nigiri Set is very popular. It's fresh and delicious.",
+          "next": "recommend_salmon",
+          "moodChange": 1
+        },
+        {
+          "text": "The Shrimp (Ebi) Nigiri is excellent today. Very sweet and firm.",
+          "next": "recommend_ebi",
+          "moodChange": 1
+        },
+        {
+          "text": "I don't know, everything is good. Just pick something.",
+          "next": "recommend_bad",
+          "moodChange": -2
+        }
+      ]
+    },
+    "recommend_salmon": {
+      "text": "That sounds great! I love salmon. Does the set come with anything else?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Yes, it includes a bowl of hot miso soup and a small salad.",
+          "next": "order_confirmed_salmon",
+          "moodChange": 1
+        }
+      ]
+    },
+    "recommend_ebi": {
+      "text": "Oh, Shrimp sounds wonderful! I'll have that, please.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Excellent choice. Coming right up!",
+          "next": "order_confirmed_ebi",
+          "moodChange": 1
+        }
+      ]
+    },
+    "recommend_bad": {
+      "text": "Oh... well, I guess I'll just have the Tuna Nigiri then.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Tuna it is. I'll get that for you.",
+          "next": "order_confirmed_tuna",
+          "moodChange": 0
+        }
+      ]
+    },
+    "order_confirmed_salmon": {
+      "text": "I'm looking forward to the meal!",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "salmon_nigiri",
+      "choices": []
+    },
+    "order_confirmed_ebi": {
+      "text": "I can't wait to try it!",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "ebi_nigiri",
+      "choices": []
+    },
+    "order_confirmed_tuna": {
+      "text": "Please don't take too long, I'm in a hurry.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "tuna_nigiri",
+      "choices": []
+    }
+  },
+  "r2": {
+    "start": {
+      "text": "Ciao! It smells amazing in here. I am absolutely famished!",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:33.33%_50%]",
+      "choices": [
+        {
+          "text": "Welcome to Bella Trattoria! Can I start you off with some drinks?",
+          "next": "drinks",
+          "moodChange": 1
+        },
+        {
+          "text": "Are you ready to order or do you need a minute?",
+          "next": "rushing",
+          "moodChange": -1
+        }
+      ]
+    },
+    "drinks": {
+      "text": "Just sparkling water with lemon, please. What is your signature dish?",
+      "customerImage": "/assets/customers/c2.jpg",
+      "choices": [
+        {
+          "text": "Our classic wood-fired Margherita Pizza is a favorite.",
+          "next": "order_pizza",
+          "moodChange": 1
+        }
+      ]
+    },
+    "rushing": {
+      "text": "I just sat down! But fine, I will just take a Margherita Pizza.",
+      "customerImage": "/assets/customers/c2.jpg",
+      "choices": [
+        {
+          "text": "Sorry to rush you. One Margherita Pizza coming right up.",
+          "next": "order_pizza",
+          "moodChange": 1
+        }
+      ]
+    },
+    "order_pizza": {
+      "text": "Perfetto! Please make sure the crust is nice and crispy.",
+      "customerImage": "/assets/customers/c2.jpg",
+      "action": "start_cooking",
+      "recipeId": "r2",
+      "choices": []
+    }
+  },
+  "r3": {
+    "start": {
+      "text": "Sawasdee krub! I need something really flavorful and spicy today.",
+      "customerImage": "/assets/customers/c3.jpg",
+      "choices": [
+        {
+          "text": "Sawasdee! You've come to the right place. How about our Pad Thai?",
+          "next": "recommend_padthai",
+          "moodChange": 1
+        },
+        {
+          "text": "Everything here is spicy. What do you want?",
+          "next": "rude_start",
+          "moodChange": -2
+        }
+      ]
+    },
+    "recommend_padthai": {
+      "text": "Pad Thai sounds amazing. Can you make it extra spicy?",
+      "customerImage": "/assets/customers/c3.jpg",
+      "choices": [
+        {
+          "text": "Absolutely! Extra chili flakes coming right up.",
+          "next": "order_spicy",
+          "moodChange": 1
+        },
+        {
+          "text": "I can try, but no promises.",
+          "next": "order_spicy_bad",
+          "moodChange": -1
+        }
+      ]
+    },
+    "rude_start": {
+      "text": "Uh... okay. Just give me Pad Thai, extra spicy I guess.",
+      "customerImage": "/assets/customers/c3.jpg",
+      "choices": [
+        {
+          "text": "Coming right up! I'll make sure it's fiery.",
+          "next": "order_spicy",
+          "moodChange": 1
+        },
+        {
+          "text": "Sure whatever.",
+          "next": "order_spicy_bad",
+          "moodChange": -1
+        }
+      ]
+    },
+    "order_spicy": {
+      "text": "Thank you! I love it when it burns a little.",
+      "customerImage": "/assets/customers/c3.jpg",
+      "action": "start_cooking",
+      "recipeId": "r3",
+      "choices": []
+    },
+    "order_spicy_bad": {
+      "text": "Well, just do your best...",
+      "customerImage": "/assets/customers/c3.jpg",
+      "action": "start_cooking",
+      "recipeId": "r3",
+      "choices": []
+    }
+  },
+  "r4": {
+    "start": {
+      "text": "Bonjour! Such a charming café. Do you have any seasonal pastries today?",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "Bonjour! Yes, our Berry Macaron Tower is perfect for this season.",
+          "next": "recommend_macaron",
+          "moodChange": 1
+        },
+        {
+          "text": "We just have what's in the display case.",
+          "next": "rude_start",
+          "moodChange": -2
+        }
+      ]
+    },
+    "recommend_macaron": {
+      "text": "A Berry Macaron Tower? Oh, that sounds simply divine! Is it very sweet?",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "It has a perfect balance of sweetness from the macarons and tartness from fresh berries.",
+          "next": "order_macaron",
+          "moodChange": 1
+        },
+        {
+          "text": "Yes, it's sugar basically.",
+          "next": "order_macaron_bad",
+          "moodChange": -1
+        }
+      ]
+    },
+    "rude_start": {
+      "text": "Oh... I see. I suppose I'll just take the Macaron Tower then.",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "Right away. I'll make sure it's plated beautifully.",
+          "next": "order_macaron",
+          "moodChange": 1
+        },
+        {
+          "text": "Okay.",
+          "next": "order_macaron_bad",
+          "moodChange": -1
+        }
+      ]
+    },
+    "order_macaron": {
+      "text": "Wonderful. I'll have an Earl Grey tea to pair with it, please.",
+      "customerImage": null,
+      "action": "start_cooking",
+      "recipeId": "r4",
+      "choices": []
+    },
+    "order_macaron_bad": {
+      "text": "I hope it's at least edible.",
+      "customerImage": null,
+      "action": "start_cooking",
+      "recipeId": "r4",
+      "choices": []
+    }
+  },
+  "r5": {
+    "start": {
+      "text": "Hey there! I'm starved. Got any good burgers?",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "You bet! Our Classic Cheeseburger is the best in town.",
+          "next": "recommend_burger",
+          "moodChange": 1
+        },
+        {
+          "text": "Yeah, burgers are on the menu.",
+          "next": "rude_start",
+          "moodChange": -1
+        }
+      ]
+    },
+    "recommend_burger": {
+      "text": "Awesome! Load it up with a beef patty and lots of cheese.",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "Coming right up, hot and fresh off the grill!",
+          "next": "order_burger",
+          "moodChange": 1
+        }
+      ]
+    },
+    "rude_start": {
+      "text": "Alright, alright. I'll just take a Classic Cheeseburger.",
+      "customerImage": null,
+      "choices": [
+        {
+          "text": "Sure thing. Give me a minute.",
+          "next": "order_burger",
+          "moodChange": -1
+        }
+      ]
+    },
+    "order_burger": {
+      "text": "Can't wait! My stomach is rumbling.",
+      "customerImage": null,
+      "action": "start_cooking",
+      "recipeId": "r5",
+      "choices": []
+    }
+  }
+}

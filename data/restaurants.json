@@ -1,0 +1,67 @@
+[
+  {
+    "id": "r1",
+    "name": "Sakura Sushi",
+    "cuisine": "Japanese",
+    "difficulty": 1,
+    "image": "/assets/food/r1.jpg",
+    "themeColors": {
+      "primary": "bg-white",
+      "accent": "text-red-500 bg-red-50 border-red-100",
+      "glow": "hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
+    },
+    "description": "Master formal ordering and dietary requirements in a serene omakase setting."
+  },
+  {
+    "id": "r2",
+    "name": "Bella Trattoria",
+    "cuisine": "Italian",
+    "difficulty": 2,
+    "image": "/assets/food/r2.jpg",
+    "themeColors": {
+      "primary": "bg-white",
+      "accent": "text-amber-600 bg-amber-50 border-amber-100",
+      "glow": "hover:shadow-[0_10px_40px_rgba(245,158,11,0.15)]"
+    },
+    "description": "Ask for recommendations and describe classic Mediterranean menu items."
+  },
+  {
+    "id": "r3",
+    "name": "Spicy Market",
+    "cuisine": "Thai Street",
+    "difficulty": 3,
+    "image": "/assets/food/r3.jpg",
+    "themeColors": {
+      "primary": "bg-white",
+      "accent": "text-emerald-600 bg-emerald-50 border-emerald-100",
+      "glow": "hover:shadow-[0_10px_40px_rgba(16,185,129,0.15)]"
+    },
+    "description": "Customize vivid orders and negotiate spice levels with local vendors."
+  },
+  {
+    "id": "r4",
+    "name": "Lumière Café",
+    "cuisine": "Dessert",
+    "difficulty": 4,
+    "image": "/assets/food/r4.jpg",
+    "themeColors": {
+      "primary": "bg-white",
+      "accent": "text-purple-500 bg-purple-50 border-purple-100",
+      "glow": "hover:shadow-[0_10px_40px_rgba(168,85,247,0.15)]"
+    },
+    "description": "Engage in elegant small talk and inquire about seasonal pastries."
+  },
+  {
+    "id": "r5",
+    "name": "Route 66",
+    "cuisine": "American Diner",
+    "difficulty": 5,
+    "image": "/assets/food/r5.jpg",
+    "themeColors": {
+      "primary": "bg-white",
+      "accent": "text-sky-500 bg-sky-50 border-sky-100",
+      "glow": "hover:shadow-[0_10px_40px_rgba(14,165,233,0.15)]"
+    },
+    "description": "Navigate casual, fast-paced ordering and clarify mistakes smoothly."
+  }
+]

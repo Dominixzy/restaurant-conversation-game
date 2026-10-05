@@ -1,0 +1,86 @@
+[
+  { 
+    "id": "rice", 
+    "name": "Sushi Rice", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_0%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_0%] w-32 h-32 scale-[1.2]",
+    "xOffset": 0, "yOffset": 15, "zIndex": 10
+  },
+  { 
+    "id": "salmon", 
+    "name": "Salmon", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_0%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_0%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": -18, "zIndex": 20
+  },
+  { 
+    "id": "tuna", 
+    "name": "Tuna", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_0%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_0%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": -18, "zIndex": 20
+  },
+  { 
+    "id": "nori_flat", 
+    "name": "Nori Sheet", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_0%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_0%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": 18, "zIndex": 5
+  },
+  { 
+    "id": "avocado", 
+    "name": "Avocado", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_33.33%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_33.33%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": -18, "zIndex": 20
+  },
+  { 
+    "id": "cucumber", 
+    "name": "Cucumber", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_33.33%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_33.33%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": -18, "zIndex": 20
+  },
+  { 
+    "id": "ikura", 
+    "name": "Salmon Roe", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_33.33%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_33.33%] w-32 h-32 scale-[1.2]",
+    "xOffset": 0, "yOffset": -15, "zIndex": 20
+  },
+  { 
+    "id": "wasabi", 
+    "name": "Wasabi", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_33.33%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_33.33%] w-24 h-24 scale-[0.7]",
+    "xOffset": 0, "yOffset": -10, "zIndex": 15
+  },
+  { 
+    "id": "ginger", 
+    "name": "Ginger", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_66.66%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:0%_66.66%] w-32 h-32 scale-[0.8]",
+    "xOffset": 80, "yOffset": 30, "zIndex": 25
+  },
+  { 
+    "id": "soy_sauce", 
+    "name": "Soy Sauce", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_66.66%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:33.33%_66.66%] w-32 h-32 scale-[0.9]",
+    "xOffset": -80, "yOffset": -40, "zIndex": 5
+  },
+  { 
+    "id": "nori_wrap", 
+    "name": "Gunkan Wrap", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_66.66%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:66.66%_66.66%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": 0, "zIndex": 18
+  },
+  { 
+    "id": "squid", 
+    "name": "Squid (Ika)", 
+    "icon": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_66.66%]",
+    "className": "bg-[url('/assets/food/sushi/1.png')] bg-[length:400%_400%] bg-[position:100%_66.66%] w-32 h-32 scale-[1.3]",
+    "xOffset": 0, "yOffset": -18, "zIndex": 20
+  }
+]

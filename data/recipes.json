@@ -1,0 +1,22 @@
+{
+  "salmon_nigiri": {
+    "targetDishName": "Salmon Nigiri",
+    "correctSequence": ["rice", "wasabi", "salmon"]
+  },
+  "tuna_nigiri": {
+    "targetDishName": "Tuna Nigiri",
+    "correctSequence": ["rice", "wasabi", "tuna"]
+  },
+  "ebi_nigiri": {
+    "targetDishName": "Shrimp (Ebi) Nigiri",
+    "correctSequence": ["rice", "wasabi", "ebi"]
+  },
+  "ikura_gunkan": {
+    "targetDishName": "Ikura Gunkan",
+    "correctSequence": ["rice", "nori_wrap", "ikura"]
+  },
+  "tamago_nigiri": {
+    "targetDishName": "Tamago Nigiri",
+    "correctSequence": ["rice", "tamago", "nori_flat"]
+  }
+}
