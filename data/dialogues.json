@@ -7,12 +7,14 @@
         {
           "text": "Good evening! Yes, right this way. Here is the menu.",
           "next": "menu",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Polite greeting! Repeating the customer's greeting ('Good evening') and using 'right this way' sounds professional and welcoming."
         },
         {
           "text": "Yeah, just sit anywhere.",
           "next": "menu",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "Too casual. 'Yeah' and 'just sit anywhere' sound careless. Try: 'Yes, of course. Please follow me.'"
         }
       ]
     },
@@ -23,17 +25,36 @@
         {
           "text": "Our Salmon Nigiri Set is very popular. It's fresh and delicious.",
           "next": "recommend_salmon",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Great recommendation! Use 'popular' and two adjectives ('fresh and delicious') to make food sound attractive."
         },
         {
-          "text": "The Shrimp (Ebi) Nigiri is excellent today. Very sweet and firm.",
-          "next": "recommend_ebi",
-          "moodChange": 1
+          "text": "The Ikura Gunkan is a chef's favourite. It's rich and a little salty.",
+          "next": "recommend_ikura",
+          "moodChange": 1,
+          "tip": "Nice! 'A chef's favourite' makes the dish sound special. Describing taste ('rich', 'a little salty') helps the customer decide."
+        },
+        {
+          "text": "Before I recommend something, is there anything you don't eat?",
+          "next": "ask_diet",
+          "moodChange": 1,
+          "tip": "Excellent service! Asking about food the customer doesn't eat is polite and shows you care. 'Is there anything you don't eat?' is a very useful question."
         },
         {
           "text": "I don't know, everything is good. Just pick something.",
           "next": "recommend_bad",
-          "moodChange": -2
+          "moodChange": -2,
+          "tip": "Unhelpful. The customer asked for advice. 'I don't know' and 'just pick something' sound lazy. Try: 'I'd recommend…'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "familiar with",
+          "meaning": "knowing something well because you have seen or used it before"
+        },
+        {
+          "word": "recommend",
+          "meaning": "to suggest something because you think it is good"
         }
       ]
     },
@@ -43,19 +64,155 @@
       "choices": [
         {
           "text": "Yes, it includes a bowl of hot miso soup and a small salad.",
-          "next": "order_confirmed_salmon",
-          "moodChange": 1
+          "next": "drink",
+          "moodChange": 1,
+          "tip": "Clear answer! 'It includes…' is a useful phrase to explain what comes with a set meal."
+        },
+        {
+          "text": "No. Just the sushi.",
+          "next": "drink",
+          "moodChange": -1,
+          "tip": "Too short. A one-word 'No' sounds cold. Try: 'It comes with miso soup. Would you like to add a salad?'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "set",
+          "meaning": "a meal with several dishes served together for one price"
         }
       ]
     },
-    "recommend_ebi": {
-      "text": "Oh, Shrimp sounds wonderful! I'll have that, please.",
+    "drink": {
+      "text": "Perfect. Could I also get something to drink?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Of course! Would you prefer hot green tea or cold water?",
+          "next": "order_confirmed_salmon",
+          "moodChange": 1,
+          "tip": "Great! 'Would you prefer A or B?' is a polite way to offer choices and helps the customer decide quickly."
+        },
+        {
+          "text": "The drinks are in the fridge. Get it yourself.",
+          "next": "order_confirmed_salmon",
+          "moodChange": -2,
+          "tip": "Rude! Customers expect you to serve them. Try: 'Of course. What would you like to drink?'"
+        }
+      ]
+    },
+    "recommend_ikura": {
+      "text": "Ikura? I've never heard of it. What is it exactly?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "It's salmon roe. They're small orange fish eggs that pop in your mouth.",
+          "next": "ikura_reply",
+          "moodChange": 1,
+          "tip": "Very clear! Explaining a new food with simple words, colour and texture ('small', 'orange', 'pop') makes it easy to understand."
+        },
+        {
+          "text": "Fish eggs. Do you want it or not?",
+          "next": "ikura_bad",
+          "moodChange": -2,
+          "tip": "Impatient. 'Do you want it or not?' sounds pushy. Try: 'It's salmon roe. Would you like to try it?'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "exactly",
+          "meaning": "used to ask for more detail or a clear answer"
+        }
+      ]
+    },
+    "ikura_reply": {
+      "text": "Interesting! I'd like to try something new. I'll have the Ikura Gunkan, please.",
       "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Excellent choice. Coming right up!",
-          "next": "order_confirmed_ebi",
-          "moodChange": 1
+          "next": "order_confirmed_ikura",
+          "moodChange": 1,
+          "tip": "'Excellent choice' compliments the customer, and 'Coming right up!' is a friendly way to say the food will be ready soon."
+        }
+      ],
+      "vocab": [
+        {
+          "word": "try something new",
+          "meaning": "to do or eat something for the first time"
+        }
+      ]
+    },
+    "order_confirmed_ikura": {
+      "text": "I can't wait to try it!",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "ikura_gunkan",
+      "choices": []
+    },
+    "ask_diet": {
+      "text": "Thank you for asking! Actually, I'm vegetarian, so I don't eat fish or meat.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "No problem! Our Avocado Cucumber Roll has no fish at all. It's fresh and crunchy.",
+          "next": "veggie_happy",
+          "moodChange": 1,
+          "tip": "Perfect! 'No problem!' makes the customer feel comfortable, and you offered a suitable dish right away."
+        },
+        {
+          "text": "Sushi without fish? That's a bit strange.",
+          "next": "veggie_upset",
+          "moodChange": -2,
+          "tip": "Impolite. Never judge a customer's diet. Respect their choice and help: 'Of course. We have a vegetable roll.'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "vegetarian",
+          "meaning": "a person who does not eat meat or fish"
+        }
+      ]
+    },
+    "veggie_happy": {
+      "text": "Wonderful! That sounds delicious. I'll have the Avocado Cucumber Roll.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Great choice. I'll make sure there's no fish in it.",
+          "next": "order_confirmed_veggie",
+          "moodChange": 1,
+          "tip": "Good! Repeating the customer's request ('no fish') shows you listened carefully."
+        }
+      ]
+    },
+    "veggie_upset": {
+      "text": "It's not strange, it's my choice. Do you have anything without fish or not?",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "I'm sorry, that was rude of me. We have an Avocado Cucumber Roll.",
+          "next": "order_confirmed_veggie",
+          "moodChange": 1,
+          "tip": "Good recovery! A sincere apology ('I'm sorry, that was rude of me') can fix a mistake. Then offer a solution."
+        },
+        {
+          "text": "Fine. There's a vegetable roll.",
+          "next": "order_confirmed_veggie",
+          "moodChange": -1,
+          "tip": "Still unfriendly. 'Fine.' sounds annoyed. Apologise first, then offer the dish politely."
+        }
+      ]
+    },
+    "order_confirmed_veggie": {
+      "text": "Thank you. I'm looking forward to it.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "veggie_roll",
+      "choices": [],
+      "vocab": [
+        {
+          "word": "looking forward to",
+          "meaning": "feeling happy and excited about something that will happen"
         }
       ]
     },
@@ -65,8 +222,50 @@
       "choices": [
         {
           "text": "Tuna it is. I'll get that for you.",
+          "next": "wasabi",
+          "moodChange": 0,
+          "tip": "This is OK, but the customer is already disappointed. Adding an apology helps: 'Sorry about that. Tuna is a great choice.'"
+        }
+      ]
+    },
+    "wasabi": {
+      "text": "Is the green paste spicy? I'm not good with spicy food.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Yes, that's wasabi. I can leave it out for you if you like.",
+          "next": "order_confirmed_tuna_plain",
+          "moodChange": 1,
+          "tip": "Very helpful! 'I can leave it out' offers to change the dish. 'If you like' makes the offer polite."
+        },
+        {
+          "text": "It's not that spicy. You'll be fine.",
           "next": "order_confirmed_tuna",
-          "moodChange": 0
+          "moodChange": -1,
+          "tip": "Ignoring the customer's concern is not good service. Offer to change the dish: 'I can make it without wasabi.'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "paste",
+          "meaning": "a soft, thick mixture"
+        },
+        {
+          "word": "spicy",
+          "meaning": "having a hot, strong taste that burns your mouth a little"
+        }
+      ]
+    },
+    "order_confirmed_tuna_plain": {
+      "text": "Thank you, that's very kind. No wasabi, please!",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "tuna_nigiri_plain",
+      "choices": [],
+      "vocab": [
+        {
+          "word": "kind",
+          "meaning": "friendly and helpful"
         }
       ]
     },
@@ -75,20 +274,56 @@
       "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "salmon_nigiri",
-      "choices": []
-    },
-    "order_confirmed_ebi": {
-      "text": "I can't wait to try it!",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
-      "action": "start_cooking",
-      "recipeId": "ebi_nigiri",
-      "choices": []
+      "choices": [],
+      "vocab": [
+        {
+          "word": "looking forward to",
+          "meaning": "feeling happy and excited about something that will happen"
+        }
+      ]
     },
     "order_confirmed_tuna": {
       "text": "Please don't take too long, I'm in a hurry.",
       "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "tuna_nigiri",
+      "choices": [],
+      "vocab": [
+        {
+          "word": "in a hurry",
+          "meaning": "needing to do something quickly because you don't have much time"
+        }
+      ]
+    },
+    "ikura_bad": {
+      "text": "Hmm, that doesn't sound very nice. I'll just have a Salmon Roll instead.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "choices": [
+        {
+          "text": "Of course. Sorry, I should have explained it better.",
+          "next": "order_confirmed_salmon_roll",
+          "moodChange": 1,
+          "tip": "Good recovery! 'I should have…' is a polite way to admit a mistake."
+        },
+        {
+          "text": "OK.",
+          "next": "order_confirmed_salmon_roll",
+          "moodChange": 0,
+          "tip": "Acceptable, but very short. Add something friendly: 'Of course. A Salmon Roll coming right up!'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "instead",
+          "meaning": "in place of something else"
+        }
+      ]
+    },
+    "order_confirmed_salmon_roll": {
+      "text": "Thanks. Please don't make me wait too long.",
+      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "action": "start_cooking",
+      "recipeId": "salmon_roll",
       "choices": []
     }
   },
@@ -100,12 +335,20 @@
         {
           "text": "Welcome to Bella Trattoria! Can I start you off with some drinks?",
           "next": "drinks",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Perfect! 'Can I start you off with…?' is a polite, natural way to offer drinks first."
         },
         {
           "text": "Are you ready to order or do you need a minute?",
           "next": "rushing",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "This sounds rushed. The customer just sat down. Give them time and welcome them first."
+        }
+      ],
+      "vocab": [
+        {
+          "word": "famished",
+          "meaning": "extremely hungry"
         }
       ]
     },
@@ -116,7 +359,14 @@
         {
           "text": "Our classic wood-fired Margherita Pizza is a favorite.",
           "next": "order_pizza",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Good! A 'signature dish' needs a confident answer. Adjectives like 'classic' and 'wood-fired' make it sound special."
+        }
+      ],
+      "vocab": [
+        {
+          "word": "signature dish",
+          "meaning": "the special dish a restaurant or chef is famous for"
         }
       ]
     },
@@ -127,7 +377,8 @@
         {
           "text": "Sorry to rush you. One Margherita Pizza coming right up.",
           "next": "order_pizza",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Nice recovery! Saying 'Sorry to rush you' admits the mistake politely and repairs the relationship."
         }
       ]
     },
@@ -136,7 +387,17 @@
       "customerImage": "/assets/customers/c2.jpg",
       "action": "start_cooking",
       "recipeId": "r2",
-      "choices": []
+      "choices": [],
+      "vocab": [
+        {
+          "word": "crust",
+          "meaning": "the hard outer part of bread or pizza"
+        },
+        {
+          "word": "crispy",
+          "meaning": "hard and making a pleasant sound when you bite it"
+        }
+      ]
     }
   },
   "r3": {
@@ -147,12 +408,20 @@
         {
           "text": "Sawasdee! You've come to the right place. How about our Pad Thai?",
           "next": "recommend_padthai",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Great! Greeting the customer in their language and suggesting a dish with 'How about…?' is friendly and helpful."
         },
         {
           "text": "Everything here is spicy. What do you want?",
           "next": "rude_start",
-          "moodChange": -2
+          "moodChange": -2,
+          "tip": "Rude. 'What do you want?' sounds impatient. Try: 'What would you like today?' The word 'would' makes it polite."
+        }
+      ],
+      "vocab": [
+        {
+          "word": "flavorful",
+          "meaning": "having a strong, pleasant taste"
         }
       ]
     },
@@ -163,12 +432,14 @@
         {
           "text": "Absolutely! Extra chili flakes coming right up.",
           "next": "order_spicy",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "'Absolutely!' is a strong, positive way to say yes. Customers feel you are happy to help."
         },
         {
           "text": "I can try, but no promises.",
           "next": "order_spicy_bad",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "'No promises' sounds negative. Try a positive version: 'I'll do my best to make it extra spicy!'"
         }
       ]
     },
@@ -179,12 +450,14 @@
         {
           "text": "Coming right up! I'll make sure it's fiery.",
           "next": "order_spicy",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Good recovery! A positive, energetic answer can rebuild the customer's mood."
         },
         {
           "text": "Sure whatever.",
           "next": "order_spicy_bad",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "'Sure whatever' sounds like you don't care. Avoid 'whatever' with customers."
         }
       ]
     },
@@ -211,12 +484,28 @@
         {
           "text": "Bonjour! Yes, our Berry Macaron Tower is perfect for this season.",
           "next": "recommend_macaron",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Lovely! You answered the question ('Yes') and gave a specific recommendation with a reason ('perfect for this season')."
         },
         {
           "text": "We just have what's in the display case.",
           "next": "rude_start",
-          "moodChange": -2
+          "moodChange": -2,
+          "tip": "This is unhelpful. Even if the choice is limited, describe something: 'Today we have…'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "charming",
+          "meaning": "pleasant and attractive"
+        },
+        {
+          "word": "seasonal",
+          "meaning": "available only at a particular time of year"
+        },
+        {
+          "word": "pastries",
+          "meaning": "sweet baked foods such as croissants or tarts"
         }
       ]
     },
@@ -227,12 +516,20 @@
         {
           "text": "It has a perfect balance of sweetness from the macarons and tartness from fresh berries.",
           "next": "order_macaron",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Excellent description! 'A perfect balance of A and B' is an advanced way to describe flavour."
         },
         {
           "text": "Yes, it's sugar basically.",
           "next": "order_macaron_bad",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "'Basically sugar' sounds negative and lazy. Describe the taste politely: 'It's quite sweet, but…'"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "divine",
+          "meaning": "extremely good or delicious (informal)"
         }
       ]
     },
@@ -243,12 +540,14 @@
         {
           "text": "Right away. I'll make sure it's plated beautifully.",
           "next": "order_macaron",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Good! 'Right away' plus a promise ('I'll make sure…') shows care and builds trust."
         },
         {
           "text": "Okay.",
           "next": "order_macaron_bad",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "A one-word answer like 'Okay.' can feel cold. Add a little more: 'Of course, I'll bring it right away.'"
         }
       ]
     },
@@ -257,14 +556,26 @@
       "customerImage": null,
       "action": "start_cooking",
       "recipeId": "r4",
-      "choices": []
+      "choices": [],
+      "vocab": [
+        {
+          "word": "pair with",
+          "meaning": "to serve one food or drink together with another because they go well together"
+        }
+      ]
     },
     "order_macaron_bad": {
       "text": "I hope it's at least edible.",
       "customerImage": null,
       "action": "start_cooking",
       "recipeId": "r4",
-      "choices": []
+      "choices": [],
+      "vocab": [
+        {
+          "word": "edible",
+          "meaning": "safe or good enough to eat"
+        }
+      ]
     }
   },
   "r5": {
@@ -275,12 +586,20 @@
         {
           "text": "You bet! Our Classic Cheeseburger is the best in town.",
           "next": "recommend_burger",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Great energy! 'You bet!' is informal but friendly, which matches this casual diner. 'Best in town' is a confident recommendation."
         },
         {
           "text": "Yeah, burgers are on the menu.",
           "next": "rude_start",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "Correct but flat. The customer is excited; answer with energy and recommend something specific."
+        }
+      ],
+      "vocab": [
+        {
+          "word": "starved",
+          "meaning": "very hungry (informal)"
         }
       ]
     },
@@ -291,7 +610,8 @@
         {
           "text": "Coming right up, hot and fresh off the grill!",
           "next": "order_burger",
-          "moodChange": 1
+          "moodChange": 1,
+          "tip": "Nice! 'Hot and fresh off the grill' paints a picture, which makes the food sound delicious."
         }
       ]
     },
@@ -302,7 +622,8 @@
         {
           "text": "Sure thing. Give me a minute.",
           "next": "order_burger",
-          "moodChange": -1
+          "moodChange": -1,
+          "tip": "'Give me a minute' can sound like you are busy with something else. Try: 'Great choice, it'll be ready soon!'"
         }
       ]
     },
@@ -311,7 +632,13 @@
       "customerImage": null,
       "action": "start_cooking",
       "recipeId": "r5",
-      "choices": []
+      "choices": [],
+      "vocab": [
+        {
+          "word": "rumbling",
+          "meaning": "making a low, continuous sound, like an empty stomach"
+        }
+      ]
     }
   }
 }

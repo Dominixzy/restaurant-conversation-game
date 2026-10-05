@@ -10,7 +10,12 @@
       "accent": "text-red-500 bg-red-50 border-red-100",
       "glow": "hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
     },
-    "description": "Master formal ordering and dietary requirements in a serene omakase setting."
+    "description": "Master formal ordering and dietary requirements in a serene omakase setting.",
+    "customer": {
+      "name": "Daniel",
+      "spriteColumn": 2,
+      "gender": "male"
+    }
   },
   {
     "id": "r2",
@@ -23,7 +28,12 @@
       "accent": "text-amber-600 bg-amber-50 border-amber-100",
       "glow": "hover:shadow-[0_10px_40px_rgba(245,158,11,0.15)]"
     },
-    "description": "Ask for recommendations and describe classic Mediterranean menu items."
+    "description": "Ask for recommendations and describe classic Mediterranean menu items.",
+    "customer": {
+      "name": "Sofia",
+      "spriteColumn": 1,
+      "gender": "female"
+    }
   },
   {
     "id": "r3",
@@ -36,7 +46,12 @@
       "accent": "text-emerald-600 bg-emerald-50 border-emerald-100",
       "glow": "hover:shadow-[0_10px_40px_rgba(16,185,129,0.15)]"
     },
-    "description": "Customize vivid orders and negotiate spice levels with local vendors."
+    "description": "Customize vivid orders and negotiate spice levels with local vendors.",
+    "customer": {
+      "name": "Mr. Somchai",
+      "spriteColumn": 2,
+      "gender": "male"
+    }
   },
   {
     "id": "r4",
@@ -49,7 +64,12 @@
       "accent": "text-purple-500 bg-purple-50 border-purple-100",
       "glow": "hover:shadow-[0_10px_40px_rgba(168,85,247,0.15)]"
     },
-    "description": "Engage in elegant small talk and inquire about seasonal pastries."
+    "description": "Engage in elegant small talk and inquire about seasonal pastries.",
+    "customer": {
+      "name": "Mrs. Dubois",
+      "spriteColumn": 3,
+      "gender": "female"
+    }
   },
   {
     "id": "r5",
@@ -62,6 +82,11 @@
       "accent": "text-sky-500 bg-sky-50 border-sky-100",
       "glow": "hover:shadow-[0_10px_40px_rgba(14,165,233,0.15)]"
     },
-    "description": "Navigate casual, fast-paced ordering and clarify mistakes smoothly."
+    "description": "Navigate casual, fast-paced ordering and clarify mistakes smoothly.",
+    "customer": {
+      "name": "Jess",
+      "spriteColumn": 1,
+      "gender": "female"
+    }
   }
 ]

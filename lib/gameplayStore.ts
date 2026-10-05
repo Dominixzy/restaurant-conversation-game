@@ -1,5 +1,9 @@
 import { create } from 'zustand';
 
+// Mood cut-offs shared by the face, the mood bar and the star rating.
+export const MOOD_HAPPY = 75;
+export const MOOD_OK = 40;
+
 type GamePhase = 'dialogue' | 'cooking' | 'serving' | 'result';
 
 interface GameplayState {
@@ -17,6 +21,7 @@ interface GameplayState {
   startGame: (restaurantId: string) => void;
   makeChoice: (nextNodeId: string, moodChange: number, action?: string, recipeId?: string) => void;
   addIngredient: (ingredientId: string) => void;
+  removeLastIngredient: () => void;
   clearIngredients: () => void;
   serveFood: (isCorrect: boolean) => void;
   resetGame: () => void;
@@ -63,13 +68,17 @@ export const useGameplayStore = create<GameplayState>((set) => ({
     assembledIngredients: [...state.assembledIngredients, ingredientId]
   })),
 
+  removeLastIngredient: () => set((state) => ({
+    assembledIngredients: state.assembledIngredients.slice(0, -1)
+  })),
+
   clearIngredients: () => set({ assembledIngredients: [] }),
 
   serveFood: (isCorrect) => set((state) => {
     let finalStars = 0;
     if (isCorrect) {
-      if (state.customerMood >= 75) finalStars = 3;
-      else if (state.customerMood >= 40) finalStars = 2;
+      if (state.customerMood >= MOOD_HAPPY) finalStars = 3;
+      else if (state.customerMood >= MOOD_OK) finalStars = 2;
       else finalStars = 1;
     } else {
       finalStars = 0; // failed

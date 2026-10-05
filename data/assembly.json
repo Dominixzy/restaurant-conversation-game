@@ -1,0 +1,102 @@
+{
+  "composites": {
+    "rice_on_nori": {
+      "image": "/assets/food/sushi/steps/rice-on-nori.png",
+      "plate": {
+        "size": 52,
+        "x": 0,
+        "y": 4,
+        "lift": 2
+      }
+    },
+    "gunkan_rice": {
+      "image": "/assets/food/sushi/steps/gunkan-rice.png",
+      "plate": {
+        "size": 34,
+        "x": 0,
+        "y": 3,
+        "lift": 6
+      }
+    },
+    "gunkan_ikura": {
+      "image": "/assets/food/sushi/steps/gunkan-ikura.png",
+      "plate": {
+        "size": 34,
+        "x": 0,
+        "y": 2,
+        "lift": 0
+      }
+    },
+    "roll_salmon": {
+      "image": "/assets/food/sushi/steps/roll-salmon.png",
+      "plate": {
+        "size": 56,
+        "x": 0,
+        "y": 2,
+        "lift": 0
+      }
+    },
+    "roll_veg": {
+      "image": "/assets/food/sushi/steps/roll-veg.png",
+      "plate": {
+        "size": 56,
+        "x": 0,
+        "y": 2,
+        "lift": 0
+      }
+    },
+    "cut_salmon": {
+      "pieces": {
+        "sprite": [
+          3,
+          3
+        ],
+        "count": 6
+      }
+    },
+    "cut_veg": {
+      "pieces": {
+        "sprite": [
+          2,
+          3
+        ],
+        "count": 6
+      }
+    }
+  },
+  "merges": [
+    {
+      "from": [
+        "nori_flat",
+        "rice_sheet"
+      ],
+      "into": "rice_on_nori"
+    },
+    {
+      "from": [
+        "rice",
+        "nori_wrap"
+      ],
+      "into": "gunkan_rice"
+    },
+    {
+      "from": [
+        "gunkan_rice",
+        "ikura"
+      ],
+      "into": "gunkan_ikura"
+    }
+  ],
+  "roll": {
+    "base": "rice_on_nori",
+    "fillings": {
+      "salmon": "roll_salmon",
+      "avocado": "roll_veg",
+      "cucumber": "roll_veg"
+    }
+  },
+  "cut": {
+    "roll_salmon": "cut_salmon",
+    "roll_veg": "cut_veg"
+  }
+}
