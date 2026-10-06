@@ -82,7 +82,9 @@ A level serves its customers one at a time: `dialogue` → `cooking` → `servin
    - **stir** (Knead, Toss pasta, Mix som tam, wrap the gunkan nori): a spoon or hand goes round the food.
    - **roll**: the bamboo mat rolls the sheet into a roll. **stretch**: a rolling pin spreads the dough out. **pound**: the pestle crushes each chunk in the mortar.
 
-   Each finishes with a short label (`done`, e.g. "Golden!"). A step that wouldn't change the food skips its animation. The name of each added item floats up over the plate. Undo removes the last step, Trash clears the plate. When the plate matches the recipe it is served as `recipe.final` (2 nigiri, 2 gunkan or 6 roll pieces) by `app/play/[id]/Dish.tsx`, and the result card shows the same dish.
+   Each finishes with a short label (`done`, e.g. "Golden!").
+
+   **Sound effects** (`lib/sfx.ts`) are synthesised with the Web Audio API, so there are no audio files: each animation has an ongoing sound (bubbling pot, oven rumble, sizzling pan/grill, fryer, pouring, shaking, brushing, the mat rolling) and beats synced to it (a chop per knife cut, a thud per pestle hit, a pop per topping, a whoosh on a flip), ending with a bell. Placing a step pops (or buzzes when the order didn't ask for it there), and serving plays a happy jingle or a sad one. The speaker button in the kitchen's top bar mutes them; the choice is kept in `localStorage` (`sfx-muted`). A step that wouldn't change the food skips its animation. The name of each added item floats up over the plate. Undo removes the last step, Trash clears the plate. When the plate matches the recipe it is served as `recipe.final` (2 nigiri, 2 gunkan or 6 roll pieces) by `app/play/[id]/Dish.tsx`, and the result card shows the same dish.
 3. **Result (`handleServe` → `serveFood`):** the plate must match `correctSequence` exactly (order and count). A correct dish gives 3★ if mood ≥ `MOOD_HAPPY` (75), 2★ if ≥ `MOOD_OK` (40), otherwise 1★. A wrong dish gives 0★ ("OH NO!"). The same two constants drive the customer's face and mood-bar colours.
 
 ### Data formats
