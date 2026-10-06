@@ -2,10 +2,19 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { ChefHat, UtensilsCrossed, Sparkles } from "lucide-react";
+import { prefetchLevels } from "@/lib/preload";
+import restaurantsData from "@/data/restaurants.json";
 
 export default function Home() {
   const router = useRouter();
+
+  // While the title shows, fetch what comes next: the chef photos, the level covers and the first level.
+  useEffect(() => {
+    const covers = restaurantsData.map((r) => r.image);
+    prefetchLevels(["r1"], ["/assets/avatars/avatar1.webp", "/assets/avatars/avatar2.webp", "/assets/avatars/avatar3.webp", ...covers]);
+  }, []);
 
   return (
     <main 
@@ -16,8 +25,9 @@ export default function Home() {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="relative w-full h-full">
           <img 
-            src="/assets/restaurant.png" 
+            src="/assets/restaurant.webp" 
             alt="Restaurant Background" 
+            fetchPriority="high"
             className="object-cover w-full h-full opacity-100 brightness-[0.6]"
           />
           <div className="absolute inset-0 bg-black/40" />

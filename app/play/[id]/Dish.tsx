@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ingredientsData from "@/data/ingredients.json";
 import assemblyData from "@/data/assembly.json";
 
-export type Cell = number[]; // [column, row] in the 4x4 sheet /assets/food/sushi/1.png
+export type Cell = number[]; // [column, row] in the 4x4 sheet /assets/food/sushi/1.webp
 
 interface PlateLayout {
   size: number; // width as % of the plate area
@@ -92,7 +92,7 @@ const PLATE_SCALE = 1.5;
 
 export function spriteCell([col, row]: Cell): React.CSSProperties {
   return {
-    backgroundImage: "url('/assets/food/sushi/1.png')",
+    backgroundImage: "url('/assets/food/sushi/1.webp')",
     backgroundSize: "400% 400%",
     backgroundPosition: `${col * 33.333}% ${row * 33.333}%`,
     backgroundRepeat: "no-repeat",
@@ -248,7 +248,7 @@ function KnifeChop() {
   return (
     <motion.div
       className="absolute w-[30%] aspect-[3/2] z-[60] pointer-events-none"
-      style={{ backgroundImage: "url('/assets/food/sushi/2.png')", backgroundSize: "300% 200%", backgroundPosition: "0% 0%", translateX: "-30%", translateY: "-80%", rotate: 20 }}
+      style={{ backgroundImage: "url('/assets/food/sushi/2.webp')", backgroundSize: "300% 200%", backgroundPosition: "0% 0%", translateX: "-30%", translateY: "-80%", rotate: 20 }}
       initial={{ opacity: 0 }}
       animate={{
         left: xs.flatMap((x) => [`${x}%`, `${x}%`]),

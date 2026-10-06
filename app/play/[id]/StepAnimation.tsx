@@ -184,7 +184,7 @@ export default function StepAnimation({ anim, name, ids, before, after, reshapes
 
 const SURFACES = {
   board: { background: "repeating-linear-gradient(8deg, #e6b67f 0 14px, #dcaa72 14px 15px, #e9bc86 15px 30px)" },
-  mat: { backgroundImage: "url('/assets/food/sushi/2.png')", backgroundSize: "300% 200%", backgroundPosition: "0% 100%", backgroundColor: "#c99a5c" },
+  mat: { backgroundImage: "url('/assets/food/sushi/2.webp')", backgroundSize: "300% 200%", backgroundPosition: "0% 100%", backgroundColor: "#c99a5c" },
   stove: { background: "radial-gradient(circle at 50% 45%, #4a4a4a, #1f1f1f 75%)" },
 } as const;
 
@@ -389,7 +389,7 @@ function Swipe({ ctx, p }: { ctx: Ctx<Of<"swipe">>; p: number }) {
       {knife && (
         <div
           className="absolute w-[22%] aspect-[3/2] z-20"
-          style={{ ...at(knife.x, knife.y), backgroundImage: "url('/assets/food/sushi/2.png')", backgroundSize: "300% 200%", backgroundPosition: "0% 0%", transform: "translate(-88%, -88%)" }}
+          style={{ ...at(knife.x, knife.y), backgroundImage: "url('/assets/food/sushi/2.webp')", backgroundSize: "300% 200%", backgroundPosition: "0% 0%", transform: "translate(-88%, -88%)" }}
         />
       )}
     </Stage>
@@ -546,7 +546,7 @@ function Stir({ ctx, p }: { ctx: Ctx<Of<"stir">>; p: number }) {
         <div style={{ ...box(50, H / 2 + 2, 42), opacity: p, transform: `scale(${1.25 - p * 0.25})` }} className={ctx.icon ?? ""} />
       )}
       {anim.look === "stir" || !anim.look
-        ? <div className="absolute w-[16%] aspect-square bg-[url('/assets/food/thai/icons/spoon.png')] bg-contain bg-no-repeat" style={{ ...at(hand.x, hand.y), translate: "-50% -70%" }} />
+        ? <div className="absolute w-[16%] aspect-square bg-[url('/assets/food/thai/icons/spoon.webp')] bg-contain bg-no-repeat" style={{ ...at(hand.x, hand.y), translate: "-50% -70%" }} />
         : <div className="absolute w-[11%] aspect-square rounded-full bg-[#f2c9a0] border-4 border-stone-700" style={{ ...at(hand.x, hand.y), translate: "-50% -50%" }} />}
     </Stage>
   );
@@ -593,7 +593,7 @@ function Stretch({ ctx, p }: { ctx: Ctx<Of<"stretch">>; p: number }) {
         className="absolute drop-shadow-[0_6px_6px_rgba(0,0,0,0.35)]"
         style={{ left: `${50 - width / 2}%`, top: `${((CENTRE.y - (DOUGH.cy / 512) * width) / H) * 100}%`, width: `${width}%` }}
       />
-      {p < 1 && <div className="absolute w-[50%] aspect-[2/1] bg-[url('/assets/food/italian/icons/rolling-pin.png')] bg-contain bg-center bg-no-repeat drop-shadow-lg" style={{ ...at(pinX, CENTRE.y), translate: "-50% -50%", rotate: "70deg" }} />}
+      {p < 1 && <div className="absolute w-[50%] aspect-[2/1] bg-[url('/assets/food/italian/icons/rolling-pin.webp')] bg-contain bg-center bg-no-repeat drop-shadow-lg" style={{ ...at(pinX, CENTRE.y), translate: "-50% -50%", rotate: "70deg" }} />}
     </Stage>
   );
 }

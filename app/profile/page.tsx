@@ -7,9 +7,9 @@ import { useGameStore } from "@/lib/store";
 import { ChevronRight } from "lucide-react";
 
 const AVATARS = [
-  "/assets/avatars/avatar1.png", 
-  "/assets/avatars/avatar2.png", 
-  "/assets/avatars/avatar3.png"
+  "/assets/avatars/avatar1.webp", 
+  "/assets/avatars/avatar2.webp", 
+  "/assets/avatars/avatar3.webp"
 ];
 
 export default function ProfileScreen() {
@@ -67,7 +67,7 @@ export default function ProfileScreen() {
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img 
-          src="/assets/restaurant.png" 
+          src="/assets/restaurant.webp" 
           alt="Background" 
           className="object-cover w-full h-full opacity-60 blur-md brightness-50"
         />

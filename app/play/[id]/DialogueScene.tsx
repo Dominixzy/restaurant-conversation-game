@@ -24,7 +24,7 @@ export interface DialogueNode {
 
 export interface Customer {
   name: string;
-  spriteColumn: number; // column in /assets/food/sushi/4.png (0 = chef)
+  spriteColumn: number; // column in /assets/food/sushi/4.webp (0 = chef)
   gender?: "male" | "female";
   dialogue?: string; // dialogue tree id in dialogues.json (defaults to the restaurant id)
 }
@@ -49,7 +49,7 @@ const CHEF_COLUMN = 0;
 function spriteStyle(column: number, expression: Expression): React.CSSProperties {
   const row = expression === "happy" ? 0 : expression === "neutral" ? 1 : 2;
   return {
-    backgroundImage: "url('/assets/food/sushi/4.png')",
+    backgroundImage: "url('/assets/food/sushi/4.webp')",
     backgroundSize: "400% 300%",
     backgroundPosition: `${column * 33.333}% ${row * 50}%`,
     backgroundRepeat: "no-repeat",
@@ -108,7 +108,7 @@ function feedbackStyle(moodChange: number) {
   return { label: "Could be better", box: "bg-red-50 border-red-300", text: "text-red-700", badge: "bg-red-500" };
 }
 
-export default function DialogueScene({ nodeId, node, customer, customerMood, background = "/assets/food/sushi/5.png", onChoose, onFinish }: DialogueSceneProps) {
+export default function DialogueScene({ nodeId, node, customer, customerMood, background = "/assets/food/sushi/5.webp", onChoose, onFinish }: DialogueSceneProps) {
   const [typed, setTyped] = useState({ nodeId: "", count: 0 });
   const [picked, setPicked] = useState<{ nodeId: string; choice: DialogueChoice } | null>(null);
   const [openWord, setOpenWord] = useState<string | null>(null);
@@ -254,7 +254,7 @@ export default function DialogueScene({ nodeId, node, customer, customerMood, ba
                 transition={{ type: "spring", bounce: 0.6 }}
                 className="absolute -top-6 right-1 md:-right-8 w-20 h-20 md:w-24 md:h-24 z-20"
                 style={{
-                  backgroundImage: "url('/assets/food/sushi/7.png')",
+                  backgroundImage: "url('/assets/food/sushi/7.webp')",
                   backgroundSize: "400% 200%",
                   backgroundPosition: activePick.moodChange > 0 ? "0% 100%" : "33.333% 100%",
                 }}

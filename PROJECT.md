@@ -14,6 +14,8 @@ A browser game for practicing **English restaurant conversation**. The player is
 | Fonts | Google: Inter, Playfair Display, Luckiest Guy. Local: Roasted Ketchup, Avermont House (**personal-use-only license**, see `public/fonts/`) |
 | Tooling script | `remove_bg.js` uses `@imgly/background-removal-node` to turn `avatar*.jpg` into transparent `avatar*.png` |
 
+**Asset loading.** The game only references WebP images (`scripts/optimize_assets.mjs` makes them from the PNG/JPG originals, shrinking icons to 256px, level covers to 900px and avatars to 768px: 44MB → 4.3MB). `lib/preload.ts` lists each level's pictures from the data (`levelAssets`), and the play screen shows a loading bar until they're in (15s cap). The title screen prefetches the avatars, covers and level 1, and the select screen prefetches every unlocked level, at low priority, so levels usually open at once. `next.config.ts` lets browsers cache `/assets` for a day (Next serves `public/` with `max-age=0` otherwise). New images must be referenced as `.webp` after running the optimizer, and pictures named only in code (not data) belong in `EVERY_LEVEL` in `lib/preload.ts`.
+
 There is no backend, API route, database or test suite. Everything runs client-side, and all content is static JSON.
 
 ## Running
@@ -24,6 +26,8 @@ npm run dev      # http://localhost:3000
 npm run build && npm start
 npm run lint
 node remove_bg.js   # optional: regenerate transparent avatar PNGs
+npm run art         # cut art/generated sheets into public/assets/food, then make WebP copies
+npm run optimize-assets   # re-encode every referenced image as WebP and point the code at it
 ```
 
 ## Directory layout

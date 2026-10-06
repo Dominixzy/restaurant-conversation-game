@@ -2,7 +2,7 @@
   "r1": {
     "start": {
       "text": "Good evening. Do you have a table for one?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Good evening! Yes, right this way. Here is the menu.",
@@ -20,7 +20,7 @@
     },
     "menu": {
       "text": "Thank you. I'm quite hungry, but I'm not very familiar with Japanese food. What do you recommend?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Our Salmon Nigiri Set is very popular. It's fresh and delicious.",
@@ -60,7 +60,7 @@
     },
     "recommend_salmon": {
       "text": "That sounds great! I love salmon. Does the set come with anything else?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Yes, it includes a bowl of hot miso soup and a small salad.",
@@ -84,7 +84,7 @@
     },
     "drink": {
       "text": "Perfect. Could I also get something to drink?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Of course! Would you prefer hot green tea or cold water?",
@@ -102,7 +102,7 @@
     },
     "recommend_ikura": {
       "text": "Ikura? I've never heard of it. What is it exactly?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "It's salmon roe. They're small orange fish eggs that pop in your mouth.",
@@ -126,7 +126,7 @@
     },
     "ikura_reply": {
       "text": "Interesting! I'd like to try something new. I'll have the Ikura Gunkan, please.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Excellent choice. Coming right up!",
@@ -144,14 +144,14 @@
     },
     "order_confirmed_ikura": {
       "text": "I can't wait to try it!",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "ikura_gunkan",
       "choices": []
     },
     "ask_diet": {
       "text": "Thank you for asking! Actually, I'm vegetarian, so I don't eat fish or meat.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "No problem! Our Avocado Cucumber Roll has no fish at all. It's fresh and crunchy.",
@@ -175,7 +175,7 @@
     },
     "veggie_happy": {
       "text": "Wonderful! That sounds delicious. I'll have the Avocado Cucumber Roll.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Great choice. I'll make sure there's no fish in it.",
@@ -187,7 +187,7 @@
     },
     "veggie_upset": {
       "text": "It's not strange, it's my choice. Do you have anything without fish or not?",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "I'm sorry, that was rude of me. We have an Avocado Cucumber Roll.",
@@ -205,7 +205,7 @@
     },
     "order_confirmed_veggie": {
       "text": "Thank you. I'm looking forward to it.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "veggie_roll",
       "choices": [],
@@ -218,7 +218,7 @@
     },
     "recommend_bad": {
       "text": "Oh... well, I guess I'll just have the Tuna Nigiri then.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Tuna it is. I'll get that for you.",
@@ -230,7 +230,7 @@
     },
     "wasabi": {
       "text": "Is the green paste spicy? I'm not good with spicy food.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Yes, that's wasabi. I can leave it out for you if you like.",
@@ -258,7 +258,7 @@
     },
     "order_confirmed_tuna_plain": {
       "text": "Thank you, that's very kind. No wasabi, please!",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "tuna_nigiri_plain",
       "choices": [],
@@ -271,7 +271,7 @@
     },
     "order_confirmed_salmon": {
       "text": "I'm looking forward to the meal!",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "salmon_nigiri",
       "choices": [],
@@ -284,7 +284,7 @@
     },
     "order_confirmed_tuna": {
       "text": "Please don't take too long, I'm in a hurry.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "tuna_nigiri",
       "choices": [],
@@ -297,7 +297,7 @@
     },
     "ikura_bad": {
       "text": "Hmm, that doesn't sound very nice. I'll just have a Salmon Roll instead.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "choices": [
         {
           "text": "Of course. Sorry, I should have explained it better.",
@@ -321,7 +321,7 @@
     },
     "order_confirmed_salmon_roll": {
       "text": "Thanks. Please don't make me wait too long.",
-      "customerImage": "bg-[url('/assets/food/sushi/4.png')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
+      "customerImage": "bg-[url('/assets/food/sushi/4.webp')] bg-[length:400%_300%] bg-[position:66.66%_50%]",
       "action": "start_cooking",
       "recipeId": "salmon_roll",
       "choices": []

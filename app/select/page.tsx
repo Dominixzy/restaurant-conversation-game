@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/lib/store";
+import { prefetchLevels } from "@/lib/preload";
 import restaurantsData from "@/data/restaurants.json";
 import { Star, Lock, ArrowLeft, Map } from "lucide-react";
 
@@ -19,6 +20,12 @@ export default function SelectScreen() {
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const yyyy = today.getFullYear();
     setCurrentDate(`${dd}-${mm}-${yyyy}`);
+  }, []);
+
+  // While the player picks a level, quietly load the ones they can play.
+  useEffect(() => {
+    prefetchLevels(restaurantsData.filter((r) => progress[r.id]?.unlocked).map((r) => r.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!mounted) return null;
@@ -64,7 +71,7 @@ export default function SelectScreen() {
               {/* Avatar Box with pop-out image */}
               <div className="relative w-16 h-16 bg-amber-400 rounded-xl border-4 border-white flex items-end justify-center shadow-inner mt-2 z-10">
                  <img 
-                    src={profile.avatar?.face?.startsWith("/") ? profile.avatar.face : "/assets/avatars/avatar1.png"} 
+                    src={profile.avatar?.face?.startsWith("/") ? profile.avatar.face : "/assets/avatars/avatar1.webp"} 
                     alt="Player Avatar"
                     className="absolute bottom-0 w-[150%] max-w-none object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] select-none" 
                  />

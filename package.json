@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "optimize-assets": "node scripts/optimize_assets.mjs",
+    "art": "node scripts/extract_art.mjs && node scripts/optimize_assets.mjs"
   },
   "dependencies": {
     "@imgly/background-removal-node": "^1.4.5",

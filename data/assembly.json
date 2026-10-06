@@ -1,7 +1,7 @@
 {
   "composites": {
     "rice_on_nori": {
-      "image": "/assets/food/sushi/steps/rice-on-nori.png",
+      "image": "/assets/food/sushi/steps/rice-on-nori.webp",
       "plate": {
         "size": 52,
         "x": 0,
@@ -10,7 +10,7 @@
       }
     },
     "gunkan_rice": {
-      "image": "/assets/food/sushi/steps/gunkan-rice.png",
+      "image": "/assets/food/sushi/steps/gunkan-rice.webp",
       "plate": {
         "size": 34,
         "x": 0,
@@ -19,7 +19,7 @@
       }
     },
     "gunkan_ikura": {
-      "image": "/assets/food/sushi/steps/gunkan-ikura.png",
+      "image": "/assets/food/sushi/steps/gunkan-ikura.webp",
       "plate": {
         "size": 34,
         "x": 0,
@@ -28,7 +28,7 @@
       }
     },
     "roll_salmon": {
-      "image": "/assets/food/sushi/steps/roll-salmon.png",
+      "image": "/assets/food/sushi/steps/roll-salmon.webp",
       "plate": {
         "size": 56,
         "x": 0,
@@ -37,7 +37,7 @@
       }
     },
     "roll_veg": {
-      "image": "/assets/food/sushi/steps/roll-veg.png",
+      "image": "/assets/food/sushi/steps/roll-veg.webp",
       "plate": {
         "size": 56,
         "x": 0,
@@ -64,7 +64,7 @@
       }
     },
     "pizza_sauced": {
-      "image": "/assets/food/italian/pizza-sauced.png",
+      "image": "/assets/food/italian/pizza-sauced.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -73,7 +73,7 @@
       }
     },
     "pasta_sauced": {
-      "image": "/assets/food/italian/pasta-sauced.png",
+      "image": "/assets/food/italian/pasta-sauced.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -82,7 +82,7 @@
       }
     },
     "pizza_margherita": {
-      "image": "/assets/food/italian/pizza-margherita.png",
+      "image": "/assets/food/italian/pizza-margherita.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -91,7 +91,7 @@
       }
     },
     "pizza_margherita_cut": {
-      "image": "/assets/food/italian/pizza-margherita-cut.png",
+      "image": "/assets/food/italian/pizza-margherita-cut.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -100,7 +100,7 @@
       }
     },
     "pizza_funghi": {
-      "image": "/assets/food/italian/pizza-funghi.png",
+      "image": "/assets/food/italian/pizza-funghi.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -109,7 +109,7 @@
       }
     },
     "pizza_funghi_cut": {
-      "image": "/assets/food/italian/pizza-funghi-cut.png",
+      "image": "/assets/food/italian/pizza-funghi-cut.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -118,7 +118,7 @@
       }
     },
     "dough_flat": {
-      "image": "/assets/food/italian/dough.png",
+      "image": "/assets/food/italian/dough.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -127,7 +127,7 @@
       }
     },
     "pasta_cooked": {
-      "image": "/assets/food/italian/spaghetti.png",
+      "image": "/assets/food/italian/spaghetti.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -136,7 +136,7 @@
       }
     },
     "pancake": {
-      "image": "/assets/food/cafe/pancake.png",
+      "image": "/assets/food/cafe/pancake.webp",
       "plate": {
         "size": 52,
         "x": 0,
@@ -145,7 +145,7 @@
       }
     },
     "patty": {
-      "image": "/assets/food/diner/patty.png",
+      "image": "/assets/food/diner/patty.webp",
       "plate": {
         "size": 46,
         "x": 0,
@@ -154,7 +154,7 @@
       }
     },
     "potato_sticks": {
-      "image": "/assets/food/diner/potato-sticks.png",
+      "image": "/assets/food/diner/potato-sticks.webp",
       "plate": {
         "size": 50,
         "x": 0,
@@ -163,7 +163,7 @@
       }
     },
     "fries": {
-      "image": "/assets/food/diner/fries.png",
+      "image": "/assets/food/diner/fries.webp",
       "plate": {
         "size": 50,
         "x": 0,
@@ -172,7 +172,7 @@
       }
     },
     "chili_2": {
-      "image": "/assets/food/thai/chili-2.png",
+      "image": "/assets/food/thai/chili-2.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -181,7 +181,7 @@
       }
     },
     "chili_3": {
-      "image": "/assets/food/thai/chili-3.png",
+      "image": "/assets/food/thai/chili-3.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -190,7 +190,7 @@
       }
     },
     "paste_1": {
-      "image": "/assets/food/thai/paste-1.png",
+      "image": "/assets/food/thai/paste-1.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -199,7 +199,7 @@
       }
     },
     "paste_2": {
-      "image": "/assets/food/thai/paste-2.png",
+      "image": "/assets/food/thai/paste-2.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -208,7 +208,7 @@
       }
     },
     "paste_3": {
-      "image": "/assets/food/thai/paste-3.png",
+      "image": "/assets/food/thai/paste-3.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -217,7 +217,7 @@
       }
     },
     "som_tam_thai": {
-      "image": "/assets/food/thai/som-tam-thai.png",
+      "image": "/assets/food/thai/som-tam-thai.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -226,7 +226,7 @@
       }
     },
     "som_tam_thai_no_peanuts": {
-      "image": "/assets/food/thai/som-tam-thai-no-peanuts.png",
+      "image": "/assets/food/thai/som-tam-thai-no-peanuts.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -235,7 +235,7 @@
       }
     },
     "som_tam_poo": {
-      "image": "/assets/food/thai/som-tam-poo.png",
+      "image": "/assets/food/thai/som-tam-poo.webp",
       "plate": {
         "size": 80,
         "x": 0,
@@ -244,7 +244,7 @@
       }
     },
     "dough_kneaded": {
-      "image": "/assets/food/italian/dough-ball.png",
+      "image": "/assets/food/italian/dough-ball.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -253,7 +253,7 @@
       }
     },
     "pasta_tossed": {
-      "image": "/assets/food/italian/pasta-sauced.png",
+      "image": "/assets/food/italian/pasta-sauced.webp",
       "plate": {
         "size": 58,
         "x": 0,
@@ -262,7 +262,7 @@
       }
     },
     "patty_seasoned": {
-      "image": "/assets/food/diner/patty-seasoned.png",
+      "image": "/assets/food/diner/patty-seasoned.webp",
       "plate": {
         "size": 46,
         "x": 0,
@@ -271,7 +271,7 @@
       }
     },
     "potato_peeled": {
-      "image": "/assets/food/diner/potato-peeled.png",
+      "image": "/assets/food/diner/potato-peeled.webp",
       "plate": {
         "size": 34,
         "x": 0,
@@ -351,7 +351,7 @@
       "anim": {
         "type": "stretch",
         "title": "Stretch the dough",
-        "image": "/assets/food/italian/dough.png",
+        "image": "/assets/food/italian/dough.webp",
         "target": 27.0
       }
     },
@@ -638,7 +638,7 @@
         "potato_peeled": {
           "type": "swipe",
           "title": "Cut into sticks",
-          "image": "/assets/food/diner/potato-peeled.png",
+          "image": "/assets/food/diner/potato-peeled.webp",
           "size": 110,
           "cuts": [
             {
@@ -676,7 +676,7 @@
       "anim": {
         "type": "stir",
         "title": "Knead the dough",
-        "image": "/assets/food/italian/dough-ball.png",
+        "image": "/assets/food/italian/dough-ball.webp",
         "size": 62,
         "turns": 3,
         "look": "knead"
@@ -699,7 +699,7 @@
       "anim": {
         "type": "spread",
         "title": "Season the patty",
-        "image": "/assets/food/diner/patty-raw.png",
+        "image": "/assets/food/diner/patty-raw.webp",
         "size": 100,
         "brush": "dots",
         "colors": [
@@ -724,7 +724,7 @@
       "anim": {
         "type": "spread",
         "title": "Peel the potato",
-        "image": "/assets/food/diner/potato.png",
+        "image": "/assets/food/diner/potato.webp",
         "size": 110,
         "brush": "solid",
         "colors": [
@@ -895,7 +895,7 @@
       "anim": {
         "type": "spread",
         "title": "Spread the sauce",
-        "image": "/assets/food/italian/dough.png",
+        "image": "/assets/food/italian/dough.webp",
         "size": 90,
         "brush": "solid",
         "colors": [
@@ -1039,7 +1039,7 @@
       "anim": {
         "type": "swipe",
         "title": "Halve the tomatoes",
-        "image": "/assets/food/thai/icons/tomato.png",
+        "image": "/assets/food/thai/icons/tomato.webp",
         "size": 70,
         "cuts": [
           {
@@ -1158,7 +1158,7 @@
       "anim": {
         "type": "swipe",
         "title": "Slice the tomato",
-        "image": "/assets/food/diner/icons/tomato.png",
+        "image": "/assets/food/diner/icons/tomato.webp",
         "size": 70,
         "cuts": [
           {
@@ -1180,7 +1180,7 @@
       "anim": {
         "type": "spread",
         "title": "Salt the fries",
-        "image": "/assets/food/diner/fries.png",
+        "image": "/assets/food/diner/fries.webp",
         "size": 100,
         "brush": "dots",
         "colors": [

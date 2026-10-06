@@ -37,7 +37,7 @@
       "ikura"
     ],
     "final": {
-      "image": "/assets/food/sushi/steps/gunkan-ikura.png",
+      "image": "/assets/food/sushi/steps/gunkan-ikura.webp",
       "count": 2
     }
   },
@@ -103,7 +103,7 @@
       "cut"
     ],
     "final": {
-      "image": "/assets/food/italian/pizza-margherita-cut.png",
+      "image": "/assets/food/italian/pizza-margherita-cut.webp",
       "count": 1
     }
   },
@@ -120,7 +120,7 @@
       "cut"
     ],
     "final": {
-      "image": "/assets/food/italian/pizza-funghi-cut.png",
+      "image": "/assets/food/italian/pizza-funghi-cut.webp",
       "count": 1
     }
   },
@@ -134,7 +134,7 @@
       "basil"
     ],
     "final": {
-      "image": "/assets/food/italian/spaghetti-pomodoro.png",
+      "image": "/assets/food/italian/spaghetti-pomodoro.webp",
       "count": 1
     }
   },
@@ -149,7 +149,7 @@
       "basil"
     ],
     "final": {
-      "image": "/assets/food/italian/spaghetti-parmesan.png",
+      "image": "/assets/food/italian/spaghetti-parmesan.webp",
       "count": 1
     }
   },
@@ -162,7 +162,7 @@
       "berries"
     ],
     "final": {
-      "image": "/assets/food/cafe/final-macaron-tower.png",
+      "image": "/assets/food/cafe/final-macaron-tower.webp",
       "count": 1,
       "size": 85
     }
@@ -179,7 +179,7 @@
       "strawberries"
     ],
     "final": {
-      "image": "/assets/food/cafe/final-pancakes-strawberry.png",
+      "image": "/assets/food/cafe/final-pancakes-strawberry.webp",
       "count": 1
     }
   },
@@ -195,7 +195,7 @@
       "blueberries"
     ],
     "final": {
-      "image": "/assets/food/cafe/final-pancakes-blueberry.png",
+      "image": "/assets/food/cafe/final-pancakes-blueberry.webp",
       "count": 1
     }
   },
@@ -212,7 +212,7 @@
       "bun_top"
     ],
     "final": {
-      "image": "/assets/food/diner/final-cheeseburger.png",
+      "image": "/assets/food/diner/final-cheeseburger.webp",
       "count": 1,
       "size": 118
     }
@@ -229,7 +229,7 @@
       "bun_top"
     ],
     "final": {
-      "image": "/assets/food/diner/final-cheeseburger-no-lettuce.png",
+      "image": "/assets/food/diner/final-cheeseburger-no-lettuce.webp",
       "count": 1,
       "size": 118
     }
@@ -244,7 +244,7 @@
       "salt"
     ],
     "final": {
-      "image": "/assets/food/diner/final-fries.png",
+      "image": "/assets/food/diner/final-fries.webp",
       "count": 1,
       "size": 100
     }
@@ -258,7 +258,7 @@
       "fry"
     ],
     "final": {
-      "image": "/assets/food/diner/final-fries-no-salt.png",
+      "image": "/assets/food/diner/final-fries-no-salt.webp",
       "count": 1,
       "size": 100
     }
@@ -279,7 +279,7 @@
       "toss"
     ],
     "final": {
-      "image": "/assets/food/thai/som-tam-poo.png",
+      "image": "/assets/food/thai/som-tam-poo.webp",
       "count": 1,
       "size": 120
     }
@@ -299,7 +299,7 @@
       "toss"
     ],
     "final": {
-      "image": "/assets/food/thai/som-tam-thai-no-peanuts.png",
+      "image": "/assets/food/thai/som-tam-thai-no-peanuts.webp",
       "count": 1,
       "size": 120
     }

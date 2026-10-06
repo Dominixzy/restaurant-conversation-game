@@ -9,8 +9,9 @@ import restaurantsData from "@/data/restaurants.json";
 import dialoguesData from "@/data/dialogues.json";
 import recipesData from "@/data/recipes.json";
 import ingredientsData from "@/data/ingredients.json";
-import { Star, ArrowLeft, Trash2, Check, Undo2, X, Volume2, VolumeX } from "lucide-react";
+import { Star, ArrowLeft, Trash2, Check, Undo2, X, Volume2, VolumeX, ChefHat } from "lucide-react";
 import { sfx, isMuted, setMuted } from "@/lib/sfx";
+import { levelAssets, preloadAll, allLoaded } from "@/lib/preload";
 import { PlateStack, DishPreview, animFor, stepChangesPlate, topLayer, isMapStep } from "./Dish";
 import StepAnimation from "./StepAnimation";
 import DialogueScene, { type Customer, type DialogueChoice } from "./DialogueScene";
@@ -19,10 +20,10 @@ import DialogueScene, { type Customer, type DialogueChoice } from "./DialogueSce
 interface Picture { image: string; size: string; position: string }
 interface Scene { dining: string; counter: string; mat?: Picture; plate: Picture }
 const SUSHI_SCENE: Scene = {
-  dining: "/assets/food/sushi/5.png",
-  counter: "/assets/food/sushi/6.png",
-  mat: { image: "/assets/food/sushi/8.png", size: "300% 200%", position: "0% 100%" },
-  plate: { image: "/assets/food/sushi/8.png", size: "300% 200%", position: "50% 100%" },
+  dining: "/assets/food/sushi/5.webp",
+  counter: "/assets/food/sushi/6.webp",
+  mat: { image: "/assets/food/sushi/8.webp", size: "300% 200%", position: "0% 100%" },
+  plate: { image: "/assets/food/sushi/8.webp", size: "300% 200%", position: "50% 100%" },
 };
 const pictureStyle = (p: Picture): React.CSSProperties => ({ backgroundImage: `url('${p.image}')`, backgroundSize: p.size, backgroundPosition: p.position, backgroundRepeat: "no-repeat" });
 
@@ -75,7 +76,26 @@ export default function PlayScreen() {
     return () => resetGame();
   }, [restaurantId]);
 
+  // The level waits behind a loading bar until its pictures are in, so nothing pops in mid-game.
+  // Levels prefetched from the title or select screen are usually ready at once. A very slow
+  // connection gets in after 15 seconds anyway; anything missing then loads as it is shown.
+  const assets = levelAssets(restaurantId);
+  const [loadedShare, setLoadedShare] = useState(0);
+  const [ready, setReady] = useState(() => allLoaded(assets));
+  useEffect(() => {
+    if (ready) return;
+    let alive = true;
+    const giveUp = setTimeout(() => alive && setReady(true), 15000);
+    preloadAll(assets, { onProgress: (share) => alive && setLoadedShare(share) }).then(() => alive && setReady(true));
+    return () => {
+      alive = false;
+      clearTimeout(giveUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restaurantId]);
+
   if (!mounted || !restaurant) return null;
+  if (!ready) return <LoadingScreen name={restaurant.name} share={loadedShare} />;
 
   const currentDialogue = dialogueTree ? dialogueTree[currentNodeId] : null;
 
@@ -121,7 +141,7 @@ export default function PlayScreen() {
       
       {/* Mood Bar utilizing 7.png icons */}
       <div className="flex items-center gap-3 bg-black/30 px-3 md:px-4 py-2 rounded-full border border-white/20 shrink-0 pointer-events-auto">
-        <div className={`w-8 h-8 ${customerMood >= MOOD_OK ? "bg-[url('/assets/food/sushi/7.png')] bg-[length:400%_200%] bg-[position:0%_100%]" : "bg-[url('/assets/food/sushi/7.png')] bg-[length:400%_200%] bg-[position:33.33%_100%]"} scale-125`} />
+        <div className={`w-8 h-8 ${customerMood >= MOOD_OK ? "bg-[url('/assets/food/sushi/7.webp')] bg-[length:400%_200%] bg-[position:0%_100%]" : "bg-[url('/assets/food/sushi/7.webp')] bg-[length:400%_200%] bg-[position:33.33%_100%]"} scale-125`} />
         <div className="w-20 md:w-32 h-4 bg-black/40 rounded-full overflow-hidden border border-white/10 shadow-inner">
           <motion.div 
             className={`h-full ${customerMood >= MOOD_HAPPY ? 'bg-green-400' : customerMood >= MOOD_OK ? 'bg-yellow-400' : 'bg-red-400'}`}
@@ -185,7 +205,7 @@ export default function PlayScreen() {
               key={reaction ? reaction.key : "idle"}
               className="w-full h-full drop-shadow-[0_10px_15px_rgba(0,0,0,0.4)]"
               style={{
-                backgroundImage: "url('/assets/food/sushi/4.png')",
+                backgroundImage: "url('/assets/food/sushi/4.webp')",
                 backgroundSize: "400% 300%",
                 backgroundPosition: `${customerColumn * 33.333}% ${reaction?.tone === "bad" ? 100 : customerMood >= MOOD_HAPPY ? 0 : customerMood >= MOOD_OK ? 50 : 100}%`,
                 backgroundRepeat: "no-repeat"
@@ -201,7 +221,7 @@ export default function PlayScreen() {
                 <motion.div
                   key={c.name}
                   className="h-full aspect-[3/4] brightness-90 drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)]"
-                  style={{ backgroundImage: "url('/assets/food/sushi/4.png')", backgroundSize: "400% 300%", backgroundPosition: `${c.spriteColumn * 33.333}% 50%`, backgroundRepeat: "no-repeat" }}
+                  style={{ backgroundImage: "url('/assets/food/sushi/4.webp')", backgroundSize: "400% 300%", backgroundPosition: `${c.spriteColumn * 33.333}% 50%`, backgroundRepeat: "no-repeat" }}
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 3 + c.spriteColumn * 0.4, repeat: Infinity, ease: "easeInOut" }}
                 />
@@ -339,7 +359,7 @@ export default function PlayScreen() {
             <div 
               className="w-9 h-9 md:w-12 md:h-12 drop-shadow-md"
               style={{
-                backgroundImage: "url('/assets/food/sushi/7.png')",
+                backgroundImage: "url('/assets/food/sushi/7.webp')",
                 backgroundSize: "400% 200%",
                 backgroundPosition: customerMood >= MOOD_OK ? "0% 100%" : "33.33% 100%",
                 backgroundRepeat: "no-repeat"
@@ -555,7 +575,7 @@ export default function PlayScreen() {
                >
                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-10 h-3 bg-stone-700 rounded-sm" />
                  <div className="flex items-center gap-2 mb-1">
-                   <div className="w-9 h-9 rounded-full bg-orange-50 shrink-0" style={{ backgroundImage: "url('/assets/food/sushi/4.png')", backgroundSize: "400% 300%", backgroundPosition: `${(guest?.spriteColumn ?? 2) * 33.333}% ${o.stars >= 2 ? 0 : o.stars === 1 ? 50 : 100}%` }} />
+                   <div className="w-9 h-9 rounded-full bg-orange-50 shrink-0" style={{ backgroundImage: "url('/assets/food/sushi/4.webp')", backgroundSize: "400% 300%", backgroundPosition: `${(guest?.spriteColumn ?? 2) * 33.333}% ${o.stars >= 2 ? 0 : o.stars === 1 ? 50 : 100}%` }} />
                    <p className="font-black text-sm text-stone-700 truncate">{guest?.name}</p>
                  </div>
                  {dish?.final && o.stars > 0 && (
@@ -626,6 +646,23 @@ export default function PlayScreen() {
           </motion.div>
         )}
       </AnimatePresence>
+    </main>
+  );
+}
+
+// Shown while a level's pictures load.
+function LoadingScreen({ name, share }: { name: string; share: number }) {
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center gap-5 bg-[radial-gradient(circle_at_50%_40%,#4a2a14,#1c1009_70%)] text-white px-8">
+      <motion.div animate={{ y: [0, -14, 0], rotate: [0, -6, 6, 0] }} transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}>
+        <ChefHat size={64} className="text-orange-300 drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]" />
+      </motion.div>
+      <h1 className="font-luckiest-guy text-3xl md:text-5xl tracking-wider text-center drop-shadow-[0_4px_0_rgba(0,0,0,0.4)]">{name}</h1>
+      <p className="text-orange-200 font-bold tracking-wide">Getting the kitchen ready…</p>
+      <div className="w-full max-w-sm h-4 rounded-full bg-black/40 border-2 border-white/20 overflow-hidden">
+        <motion.div className="h-full bg-gradient-to-r from-orange-400 to-yellow-300" initial={{ width: "0%" }} animate={{ width: `${Math.round(share * 100)}%` }} transition={{ duration: 0.2 }} />
+      </div>
+      <p className="text-sm font-black text-white/70 tabular-nums">{Math.round(share * 100)}%</p>
     </main>
   );
 }
