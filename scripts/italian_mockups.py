@@ -271,6 +271,17 @@ def icons():
         + f'<path d="M 170 400 L 170 300 C 170 240, 342 240, 342 300 L 342 400 Z" fill="#2a1408" stroke="{INK}" stroke-width="6"/>'
         f'<path d="M 210 390 C 220 340, 250 330, 256 300 C 262 330, 300 340, 302 390 Z" fill="#ff9a2e"/>'
         f'<path d="M 236 392 C 240 360, 254 352, 256 336 C 260 352, 274 360, 276 392 Z" fill="#ffe066"/>'))
+    save("icons/knead.svg", icon(
+        f'<ellipse cx="256" cy="360" rx="160" ry="36" fill="#000" opacity=".15"/>'
+        f'<path d="M 100 350 C 90 250, 190 210, 256 214 C 330 210, 430 250, 412 350 C 390 380, 120 380, 100 350 Z" fill="url(#dough)" stroke="{INK}" stroke-width="6"/>'
+        f'<path d="M 150 300 C 200 280, 300 280, 360 300" stroke="#d9b277" stroke-width="8" fill="none" stroke-linecap="round"/>'
+        f'<g transform="rotate(-12 256 200)"><path d="M 170 250 L 170 150 C 170 120, 200 120, 204 150 L 206 120 C 206 92, 240 92, 242 120 L 244 112 C 246 86, 280 86, 280 114 L 282 126 C 284 100, 316 102, 316 130 L 316 250 Z" fill="#f2c9a0" stroke="{INK}" stroke-width="6" stroke-linejoin="round"/></g>'))
+    save("icons/toss.svg", icon(
+        f'<ellipse cx="236" cy="300" rx="170" ry="80" fill="#3a3a3a" stroke="{INK}" stroke-width="6"/>'
+        f'<ellipse cx="236" cy="288" rx="140" ry="58" fill="#5a5a5a"/>'
+        + "".join(f'<path d="M {150 + i * 22} 300 C {170 + i * 22} 200, {210 + i * 22} 200, {230 + i * 22} 290" stroke="#e2b955" stroke-width="8" fill="none" stroke-linecap="round"/>' for i in range(6))
+        + f'<path d="M 170 280 C 210 250, 270 250, 310 280" stroke="#c0392b" stroke-width="16" fill="none" stroke-linecap="round" opacity=".85"/>'
+        f'<rect x="396" y="282" width="110" height="28" rx="12" fill="#222" stroke="{INK}" stroke-width="5"/>'))
 
 
 # --- scene pieces ---------------------------------------------------------------------------

@@ -94,6 +94,7 @@
     "targetDishName": "Margherita Pizza",
     "correctSequence": [
       "dough",
+      "knead",
       "stretch",
       "tomato_sauce",
       "mozzarella",
@@ -110,6 +111,7 @@
     "targetDishName": "Mushroom Pizza",
     "correctSequence": [
       "dough",
+      "knead",
       "stretch",
       "tomato_sauce",
       "mozzarella",
@@ -128,6 +130,7 @@
       "spaghetti",
       "boil",
       "tomato_sauce",
+      "toss_pasta",
       "basil"
     ],
     "final": {
@@ -141,6 +144,7 @@
       "spaghetti",
       "boil",
       "tomato_sauce",
+      "toss_pasta",
       "parmesan",
       "basil"
     ],
@@ -200,6 +204,7 @@
     "correctSequence": [
       "bun_bottom",
       "patty_raw",
+      "season",
       "grill",
       "cheese",
       "lettuce",
@@ -217,6 +222,7 @@
     "correctSequence": [
       "bun_bottom",
       "patty_raw",
+      "season",
       "grill",
       "cheese",
       "tomato",
@@ -232,6 +238,7 @@
     "targetDishName": "French Fries",
     "correctSequence": [
       "potato",
+      "peel",
       "cut",
       "fry",
       "salt"
@@ -246,6 +253,7 @@
     "targetDishName": "French Fries, No Salt",
     "correctSequence": [
       "potato",
+      "peel",
       "cut",
       "fry"
     ],

@@ -337,6 +337,8 @@ def diner():
     basket = f'<path d="M 120 220 L 392 220 L 360 370 L 152 370 Z" fill="#fbf6ec" stroke="{INK}" stroke-width="5"/>' + "".join(f'<rect x="{150 + i * 40}" y="300" width="20" height="70" fill="#d42a1c" opacity=".8"/>' for i in range(6))
     fries_in_basket = "".join(f'<rect x="{x}" y="{y}" width="20" height="130" rx="5" fill="url(#fries)" stroke="#b07a1c" stroke-width="3" transform="rotate({r} {x + 10} {y + 65})"/>' for x, y, r in [(150, 120, -18), (180, 100, -8), (210, 110, 4), (240, 90, -3), (270, 105, 10), (300, 100, 16), (330, 120, 22), (200, 140, 12), (280, 140, -12)])
     save("potato.svg", potato)
+    peeled = f'<g transform="translate(256 256)"><path d="M -110 0 C -120 -60, 80 -80, 110 -20 C 130 30, 40 70, -40 60 C -90 54, -104 30, -110 0 Z" fill="#f6e3a6" stroke="{INK}" stroke-width="5"/><path d="M -70 -30 C -30 -50, 30 -55, 70 -35" stroke="#fff8dc" stroke-width="10" fill="none" stroke-linecap="round"/><ellipse cx="60" cy="10" rx="6" ry="3" fill="#d9bf73"/></g>'
+    save("potato-peeled.svg", peeled)
     rnd = random.Random(61)
     save("potato-sticks.svg", sticks("#f4e2b0", "#c8a86a"))
     rnd = random.Random(61)
@@ -354,6 +356,14 @@ def diner():
     save("icons/tomato.svg", f'<circle cx="256" cy="280" r="130" fill="#e8402e" stroke="{INK}" stroke-width="6"/><path d="M 210 160 L 256 180 L 300 160 L 280 190 L 256 186 L 230 190 Z" fill="#3f9a3c" stroke="{INK}" stroke-width="4"/><path d="M 180 230 C 200 200, 230 190, 260 190" stroke="#fff" stroke-width="12" fill="none" opacity=".5" stroke-linecap="round"/>')
     save("icons/potato.svg", f'<g transform="translate(-256 -256) scale(2)">{potato}</g>')
     save("icons/salt.svg", f'<path d="M 190 200 L 322 200 L 340 420 L 172 420 Z" fill="#f2f6f8" stroke="{INK}" stroke-width="6"/><path d="M 190 200 C 190 130, 322 130, 322 200 Z" fill="#b8c2c8" stroke="{INK}" stroke-width="6"/>' + "".join(f'<circle cx="{x}" cy="160" r="6" fill="{INK}"/>' for x in (230, 256, 282)))
+    save("icons/peeler.svg", f'<g transform="rotate(-35 256 256)"><rect x="226" y="250" width="60" height="200" rx="24" fill="#2fb5a8" stroke="{INK}" stroke-width="6"/><path d="M 226 260 L 210 90 C 230 60, 282 60, 302 90 L 286 260 Z" fill="#dfe6ea" stroke="{INK}" stroke-width="6"/><path d="M 236 110 L 276 110 L 268 230 L 244 230 Z" fill="#9aa6b0"/></g>'
+         + f'<path d="M 330 380 C 380 360, 420 380, 440 420" stroke="#c8995a" stroke-width="14" fill="none" stroke-linecap="round"/>')
+    save("icons/season.svg", f'<path d="M 120 220 L 230 220 L 244 420 L 106 420 Z" fill="#f2f6f8" stroke="{INK}" stroke-width="6"/><path d="M 120 220 C 120 160, 230 160, 230 220 Z" fill="#b8c2c8" stroke="{INK}" stroke-width="6"/>'
+         + "".join(f'<circle cx="{x}" cy="190" r="6" fill="{INK}"/>' for x in (155, 175, 195))
+         + f'<path d="M 282 220 L 392 220 L 406 420 L 268 420 Z" fill="#3a3a3a" stroke="{INK}" stroke-width="6"/><path d="M 282 220 C 282 160, 392 160, 392 220 Z" fill="#8a8a8a" stroke="{INK}" stroke-width="6"/>'
+         + "".join(f'<circle cx="{x}" cy="190" r="6" fill="#fff"/>' for x in (317, 337, 357))
+         + f'<text x="175" y="340" font-family="Arial Black, Arial" font-size="70" text-anchor="middle" fill="{INK}">S</text><text x="337" y="340" font-family="Arial Black, Arial" font-size="70" text-anchor="middle" fill="#fff">P</text>')
+    save("patty-seasoned.svg", patty(True) + sprinkle(71, 40, "#2a2a2a", rx=230, ry=50, size=(3, 5), dy=-32) + sprinkle(72, 30, "#ffffff", rx=230, ry=50, size=(3, 5), dy=-32))
     save("icons/grill.svg", f'<rect x="80" y="220" width="352" height="180" rx="20" fill="#2b2b2b" stroke="{INK}" stroke-width="6"/>' + "".join(f'<line x1="{x}" y1="230" x2="{x}" y2="390" stroke="#666" stroke-width="8"/>' for x in range(110, 420, 40)) + f'<g transform="translate(0 30) scale(1)">{patty()}</g>'
          + "".join(f'<path d="M {x} 200 C {x - 20} 160, {x + 20} 140, {x} 100" stroke="#cfd8df" stroke-width="10" fill="none" stroke-linecap="round" opacity=".7"/>' for x in (200, 256, 312)))
     save("icons/fryer.svg", f'<rect x="100" y="220" width="312" height="200" rx="16" fill="#9aa6b0" stroke="{INK}" stroke-width="6"/><rect x="130" y="190" width="252" height="60" rx="10" fill="#e3a531" stroke="{INK}" stroke-width="5"/>'

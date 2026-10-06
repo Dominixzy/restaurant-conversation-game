@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameplayStore, MOOD_HAPPY, MOOD_OK, isBadStep, type StepQuality } from "@/lib/gameplayStore";
+import { useGameplayStore, MOOD_HAPPY, MOOD_OK } from "@/lib/gameplayStore";
 import { useGameStore } from "@/lib/store";
 import restaurantsData from "@/data/restaurants.json";
 import dialoguesData from "@/data/dialogues.json";
 import recipesData from "@/data/recipes.json";
 import ingredientsData from "@/data/ingredients.json";
-import { Star, ArrowLeft, Trash2, Check, Undo2, X } from "lucide-react";
-import { PlateStack, DishPreview, gameFor, stepChangesPlate } from "./Dish";
-import MiniGame from "./MiniGame";
+import { Star, ArrowLeft, Trash2, Check, Undo2, X, Volume2, VolumeX } from "lucide-react";
+import { sfx, isMuted, setMuted } from "@/lib/sfx";
+import { PlateStack, DishPreview, animFor, stepChangesPlate, topLayer, isMapStep } from "./Dish";
+import StepAnimation from "./StepAnimation";
 import DialogueScene, { type Customer, type DialogueChoice } from "./DialogueScene";
 
 // Where a level takes place: the dining room behind the counter, the prep counter, and what the food sits on.
@@ -27,17 +28,10 @@ const pictureStyle = (p: Picture): React.CSSProperties => ({ backgroundImage: `u
 
 // What the customer says while watching you cook, based on the latest step.
 const GOOD_LINES = ["Looks good!", "Nice!", "Mm, I can't wait!"];
-const QUALITY_LINES: Partial<Record<NonNullable<StepQuality>, string>> = {
-  under: "Hmm, it looks a bit undercooked.",
-  over: "Oh no... is it burnt?",
-  bad: "Those pieces look a bit uneven.",
-};
-function customerReaction(steps: string[], sequence: string[], complete: boolean, quality: StepQuality[]) {
+function customerReaction(steps: string[], sequence: string[], complete: boolean) {
   if (steps.length === 0) return null;
   const key = steps.length;
   const last = steps.length - 1;
-  const q = quality[last];
-  if (q && QUALITY_LINES[q]) return { key, tone: "bad", text: QUALITY_LINES[q]! };
   if (complete) return { key, tone: "good", text: "Wow, that looks delicious!" };
   if (steps[last] !== sequence[last]) return { key, tone: "bad", text: "Hmm? I don't think that's right." };
   return { key, tone: "good", text: GOOD_LINES[last % GOOD_LINES.length] };
@@ -50,7 +44,7 @@ export default function PlayScreen() {
   
   const restaurant = restaurantsData.find(r => r.id === restaurantId);
   const { 
-    phase, currentNodeId, customerMood, score, assembledIngredients, stepQuality, currentRecipeId, customerIndex, served,
+    phase, currentNodeId, customerMood, score, assembledIngredients, currentRecipeId, customerIndex, served,
     startGame, makeChoice, addIngredient, removeLastIngredient, clearIngredients, serveFood, nextCustomer, showSummary, resetGame 
   } = useGameplayStore();
 
@@ -70,7 +64,8 @@ export default function PlayScreen() {
   const { completeLevel } = useGameStore();
   const [mounted, setMounted] = useState(false);
   const [added, setAdded] = useState<{ key: number; verb: string; name: string } | null>(null);
-  const [playing, setPlaying] = useState<{ id: string; name: string } | null>(null);
+  const [soundOff, setSoundOff] = useState(isMuted);
+  const [playing, setPlaying] = useState<{ id: string; name: string; icon: string } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -92,7 +87,16 @@ export default function PlayScreen() {
   const handleServe = () => {
     if (!recipe) return;
     const isCorrect = JSON.stringify(assembledIngredients) === JSON.stringify(recipe.correctSequence);
+    if (isCorrect) sfx.success();
+    else sfx.fail();
     serveFood(isCorrect);
+  };
+
+  // Puts a step on the plate, with a pop, or a buzz when the order didn't ask for it there.
+  const placeStep = (id: string) => {
+    if (recipe && recipe.correctSequence[assembledIngredients.length] !== id) sfx.buzz();
+    else sfx.pop();
+    addIngredient(id);
   };
 
   const handleFinish = () => {
@@ -156,7 +160,7 @@ export default function PlayScreen() {
     const tools = inKitchen.filter((i) => "action" in i && i.action);
     const foods = inKitchen.filter((i) => !("action" in i && i.action));
     const isComplete = JSON.stringify(assembledIngredients) === JSON.stringify(recipe.correctSequence);
-    const reaction = customerReaction(assembledIngredients, recipe.correctSequence, isComplete, stepQuality);
+    const reaction = customerReaction(assembledIngredients, recipe.correctSequence, isComplete);
 
     return (
       <div className="flex flex-col h-screen relative overflow-hidden bg-stone-900">
@@ -232,7 +236,7 @@ export default function PlayScreen() {
           {/* Undo / Discard / Serve, at the right edge of the counter */}
           <div className="absolute inset-x-0 bottom-[170px] md:inset-x-auto md:bottom-auto md:right-10 md:top-6 flex flex-row md:flex-col justify-center gap-3 md:gap-4 z-40 pointer-events-none [&>button]:pointer-events-auto">
             <button
-              onClick={removeLastIngredient}
+              onClick={() => !playing && removeLastIngredient()}
               disabled={assembledIngredients.length === 0}
               className="w-12 h-12 md:w-20 md:h-20 bg-stone-100 hover:bg-white border-4 border-stone-300 hover:border-orange-400 rounded-2xl flex items-center justify-center text-stone-500 hover:text-orange-500 transition-all hover:scale-110 shadow-lg group relative disabled:opacity-40 disabled:pointer-events-none"
             >
@@ -240,14 +244,14 @@ export default function PlayScreen() {
               <span className="absolute right-full mr-4 bg-black/80 text-white font-bold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-wider text-sm whitespace-nowrap">Undo</span>
             </button>
             <button
-              onClick={clearIngredients}
+              onClick={() => !playing && clearIngredients()}
               className="w-12 h-12 md:w-20 md:h-20 bg-stone-100 hover:bg-white border-4 border-stone-300 hover:border-red-400 rounded-2xl flex items-center justify-center text-stone-500 hover:text-red-500 transition-all hover:scale-110 shadow-lg group relative"
             >
               <Trash2 size={28} className="md:w-8 md:h-8" />
               <span className="absolute right-full mr-4 bg-black/80 text-white font-bold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-wider text-sm whitespace-nowrap">Discard</span>
             </button>
             <button
-              onClick={handleServe}
+              onClick={() => !playing && handleServe()}
               className="w-12 h-12 md:w-24 md:h-24 bg-orange-500 hover:bg-orange-400 border-4 border-orange-600 hover:border-orange-300 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 shadow-[0_8px_0_#9a3412] hover:shadow-[0_4px_0_#9a3412] hover:translate-y-1 active:shadow-none active:translate-y-2 group relative"
             >
               <Check size={40} strokeWidth={4} />
@@ -259,6 +263,25 @@ export default function PlayScreen() {
           {/* Center Area: Bamboo Mat + Plate */}
           <div className="absolute inset-x-0 top-2 bottom-[232px] md:bottom-[168px] flex items-center justify-center pointer-events-none">
           <div className="relative h-full max-h-[min(480px,90vw)] aspect-square flex items-center justify-center">
+            {/* While a step plays, the kitchen's work shows in a small card beside the plate */}
+            {playing && animFor(playing.id, assembledIngredients) && (
+              <StepAnimation
+                key={`${playing.id}-${assembledIngredients.length}`}
+                anim={animFor(playing.id, assembledIngredients)!}
+                name={playing.name}
+                ids={assembledIngredients}
+                before={topLayer(assembledIngredients)}
+                after={isMapStep(playing.id) || playing.id === "bake" || playing.id === "roll" ? topLayer([...assembledIngredients, playing.id]) : null}
+                reshapes={isMapStep(playing.id)}
+                icon={playing.icon}
+                className="absolute z-[45] w-[46%] right-0 top-0 md:w-[min(220px,22vw)] md:right-auto md:top-1/2 md:left-[88%] md:-translate-y-1/2"
+                onDone={() => {
+                  placeStep(playing.id);
+                  setAdded({ key: Date.now(), verb: ingredientsData.find((i) => i.id === playing.id)?.action ? "" : "+", name: playing.name });
+                  setPlaying(null);
+                }}
+              />
+            )}
             {/* Mat under the plate (bamboo for sushi, a checked cloth for pizza) */}
             {scene.mat && <div className="absolute w-full h-full z-0 drop-shadow-2xl" style={pictureStyle(scene.mat)} />}
             
@@ -269,7 +292,7 @@ export default function PlayScreen() {
             >
               {/* Ingredients stack in the order they were added; a matching plate becomes the finished dish */}
               <div className="absolute inset-0 -translate-y-[11%]">
-                <PlateStack ids={assembledIngredients} quality={stepQuality} final={recipe.final} complete={isComplete} />
+                <PlateStack ids={assembledIngredients} final={recipe.final} complete={isComplete} />
                 {/* Name of what was just added floats up, so hidden layers (like wasabi under fish) still register */}
                 {added && (
                   <motion.div
@@ -303,7 +326,15 @@ export default function PlayScreen() {
             </div>
           </div>
           
-          <div className="flex items-center gap-2 md:gap-3 shrink-0 bg-black/40 backdrop-blur-md pl-1 md:pl-2 pr-3 md:pr-6 py-1 md:py-2 rounded-full border border-white/20 shadow-xl pointer-events-auto">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0 pointer-events-auto">
+          <button
+            onClick={() => { setMuted(!soundOff); setSoundOff(!soundOff); }}
+            title={soundOff ? "Sound on" : "Sound off"}
+            className="p-2 md:p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md border border-white/20 shadow-lg"
+          >
+            {soundOff ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
+          <div className="flex items-center gap-2 md:gap-3 shrink-0 bg-black/40 backdrop-blur-md pl-1 md:pl-2 pr-3 md:pr-6 py-1 md:py-2 rounded-full border border-white/20 shadow-xl">
             <div 
               className="w-9 h-9 md:w-12 md:h-12 drop-shadow-md"
               style={{
@@ -319,6 +350,7 @@ export default function PlayScreen() {
                 style={{ width: `${customerMood}%` }}
               />
             </div>
+          </div>
           </div>
         </div>
 
@@ -390,13 +422,15 @@ export default function PlayScreen() {
                 <button
                   key={ing.id}
                   onClick={() => {
-                    // Steps like Bake or Cut open their mini-game when they would actually change the food.
-                    const game = ing.action ? gameFor(ing.id) : undefined;
-                    if (game && stepChangesPlate(assembledIngredients, ing.id)) {
-                      setPlaying({ id: ing.id, name: ing.name });
+                    if (playing) return;
+                    // The kitchen plays the step for you: ingredients with prep work (slice the fish, pour the sauce)
+                    // always animate; steps like Bake or Cut only when they would actually change the food.
+                    const anim = animFor(ing.id, assembledIngredients);
+                    if (anim && (!ing.action || stepChangesPlate(assembledIngredients, ing.id))) {
+                      setPlaying({ id: ing.id, name: ing.name, icon: ing.icon });
                       return;
                     }
-                    addIngredient(ing.id);
+                    placeStep(ing.id);
                     setAdded({ key: Date.now(), verb: ing.action ? "" : "+", name: ing.name });
                   }}
                   className="group relative flex flex-col items-center gap-2 shrink-0 pointer-events-auto"
@@ -414,30 +448,9 @@ export default function PlayScreen() {
           ))}
         </div>
 
-        {playing && gameFor(playing.id) && (
-          <MiniGame
-            key={`${playing.id}-${assembledIngredients.length}`}
-            game={gameFor(playing.id)!}
-            name={playing.name}
-            onCancel={() => setPlaying(null)}
-            onDone={(quality: StepQuality, label: string) => {
-              addIngredient(playing.id, quality);
-              setAdded({ key: Date.now(), verb: "", name: `${playing.name}: ${label}` });
-              setPlaying(null);
-            }}
-          />
-        )}
       </div>
     );
   };
-
-  // How each cooking step went, for the guest card.
-  const QUALITY_TEXT: Record<string, string> = { perfect: "Perfect", ok: "Good", under: "Undercooked", over: "Overcooked", bad: "Messy" };
-  const cookingNotes = assembledIngredients.flatMap((id, i) => {
-    const q = stepQuality[i];
-    if (!q) return [];
-    return [{ step: ingredientsData.find((ing) => ing.id === id)?.name ?? id, text: QUALITY_TEXT[q], bad: isBadStep(q) }];
-  });
 
   const renderServing = () => (
     <div className="flex flex-col h-screen bg-[#FFF8E7] items-center justify-center p-6 relative overflow-hidden">
@@ -489,16 +502,6 @@ export default function PlayScreen() {
            ))}
          </div>
          
-         {score > 0 && cookingNotes.length > 0 && (
-           <div className="flex flex-wrap justify-center gap-2 -mt-4 mb-6">
-             {cookingNotes.map((n, i) => (
-               <span key={i} className={`px-3 py-1 rounded-full text-sm font-bold ${n.bad ? "bg-red-50 text-red-600" : "bg-green-50 text-green-700"}`}>
-                 {n.step}: {n.text}{n.bad ? " (−1★)" : ""}
-               </span>
-             ))}
-           </div>
-         )}
-
          <p className="text-xl text-stone-600 font-sans font-medium mb-12">
            <span className="font-bold text-stone-700">{customer.name}: </span>
            {score === 3 ? "\u201cPerfect! Thank you so much!\u201d" : 

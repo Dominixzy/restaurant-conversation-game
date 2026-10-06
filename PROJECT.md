@@ -1,6 +1,6 @@
 # Restaurant Conversation Game — Project Overview
 
-A browser game for practicing **English restaurant conversation**. The player is a chef who greets a customer, picks polite (or rude) replies in a visual-novel style dialogue, then assembles the ordered dish in a cooking mini-game. Politeness raises the customer's mood, and mood decides the star rating.
+A browser game for practicing **English restaurant conversation**. The player is a chef who greets a customer, picks polite (or rude) replies in a visual-novel style dialogue, then picks the steps to make the ordered dish while the kitchen animates each one. Politeness raises the customer's mood, and mood decides the star rating.
 
 ## Tech stack
 
@@ -73,7 +73,16 @@ images_sushi/         Source AI-generated sprite images (not referenced by code)
 A level serves its customers one at a time: `dialogue` → `cooking` → `serving` (that guest's stars) → next guest … → `result` (every ticket plus the level's stars, the rounded average). Each guest starts with mood 50. `restaurants.json` lists `customers` (r1: Daniel, Emma, Mrs. Sato), each with its own `dialogue` tree id in `dialogues.json`; levels that still have a single `customer` use the restaurant id as the tree.
 
 1. **Dialogue:** start at node `start`. Each choice has `next` and `moodChange`. Mood starts at 50 and changes by `moodChange × 25`, clamped to 0–100. A node whose choice list is empty and has `action: "start_cooking"` + `recipeId` shows a "Go to Kitchen" button.
-2. **Cooking:** the screen is split like a sushi bar: the dining room across the counter on top (the customer sits behind the counter edge and reacts to each step with a short English line and a face), and the top-down prep counter below (you are the chef, so no chef sprite is shown). The order ticket lists `recipe.correctSequence` and marks each slot green (right), red (wrong) or empty, plus any extra items in red. Clicking ingredient bins stacks them on the plate (`assembledIngredients`). Tool steps (Roll, Stretch, Boil, Bake, Cut) sit in the same sequence and open a mini-game (`app/play/[id]/MiniGame.tsx`, configured by `game` in `assembly.json`): **timing** (stop the needle in the middle zone: Raw/Golden/Burnt, Hard/Al dente/Soggy), **hold** (hold until the bar fills), **slice** (tap when the knife is over each mark) or **pound** (tap fast enough to make a smooth paste). Each step's result is kept in `stepQuality`; under/overcooked food is drawn paler/darker, bad cuts come out crooked, the customer comments, and every badly done step costs a star (a correct dish keeps at least one). A step that wouldn't change the food skips its mini-game. The name of each added item floats up over the plate. Undo removes the last step, Trash clears the plate. When the plate matches the recipe it is served as `recipe.final` (2 nigiri, 2 gunkan or 6 roll pieces) by `app/play/[id]/Dish.tsx`, and the result card shows the same dish.
+2. **Cooking:** the screen is split like a sushi bar: the dining room across the counter on top (the customer sits behind the counter edge and reacts to each step with a short English line and a face), and the top-down prep counter below (you are the chef, so no chef sprite is shown). The order ticket lists `recipe.correctSequence` and marks each slot green (right), red (wrong) or empty, plus any extra items in red. Clicking ingredient bins stacks them on the plate (`assembledIngredients`). Tool steps (Knead, Stretch, Roll, Boil, Bake, Grill, Cut…) sit in the same sequence. There are no mini-games: when a tool step or an ingredient with prep work is picked, the kitchen does it by itself as a short animation in a small card beside the plate (`app/play/[id]/StepAnimation.tsx`, about 1–3 s, tap the card to skip; other bins wait until it finishes), then the result goes on the plate. Animations are configured in `assembly.json`: `actions.<id>.anim` for steps, `prep.<id>.anim` for ingredients, and `anims` to pick a different one by what is on top of the plate. The nine kinds, drawn on a 100×75-unit stage from a single progress value:
+   - **cook** (Boil, Bake, Flip, Grill, Fry): the food sits in a pot / oven / pan / grill / fryer and goes from pale/raw to cooked with steam; `sides: 2` flips it halfway. Its `hint` ("Juicy and brown!") pops up at the end.
+   - **swipe** (Cut, slice fish/avocado/cucumber/tomato): the knife runs along each cut line in turn.
+   - **spread** (rice on nori, sauce on dough, peel potato, season patty, parmesan, salt): the ingredient's tool zig-zags over the area, revealing the sauce/rice/seasoning behind it.
+   - **scatter** (mozzarella, mushrooms, basil, berries): pieces drop onto their spots one by one.
+   - **measure** (wasabi, roe, sauces, fish sauce, lime, palm sugar, batter, syrup): the bottle or spoon tips and pours; `look: "press"` shows hands shaping the rice instead.
+   - **stir** (Knead, Toss pasta, Mix som tam, wrap the gunkan nori): a spoon or hand goes round the food.
+   - **roll**: the bamboo mat rolls the sheet into a roll. **stretch**: a rolling pin spreads the dough out. **pound**: the pestle crushes each chunk in the mortar.
+
+   Each finishes with a short label (`done`, e.g. "Golden!"). A step that wouldn't change the food skips its animation. The name of each added item floats up over the plate. Undo removes the last step, Trash clears the plate. When the plate matches the recipe it is served as `recipe.final` (2 nigiri, 2 gunkan or 6 roll pieces) by `app/play/[id]/Dish.tsx`, and the result card shows the same dish.
 3. **Result (`handleServe` → `serveFood`):** the plate must match `correctSequence` exactly (order and count). A correct dish gives 3★ if mood ≥ `MOOD_HAPPY` (75), 2★ if ≥ `MOOD_OK` (40), otherwise 1★. A wrong dish gives 0★ ("OH NO!"). The same two constants drive the customer's face and mood-bar colours.
 
 ### Data formats
@@ -100,7 +109,9 @@ A level serves its customers one at a time: `dialogue` → `cooking` → `servin
 // merges: two layers on top of each other become one picture (nori + rice sheet -> rice_on_nori, rice + nori_wrap -> gunkan_rice, + ikura -> gunkan_ikura)
 // actions: a step with a "base" turns the base and what's on it into one dish, chosen by the first listed filling present
 //          (roll: rice_on_nori -> roll_salmon / roll_veg; bake: pizza_sauced -> pizza_margherita / pizza_funghi, with an oven glow);
-//          stretch: dough (ball) -> dough_flat; boil: spaghetti (dry) -> pasta_cooked;
+//          knead: dough -> dough_kneaded; stretch: dough_kneaded -> dough_flat; boil: spaghetti (dry) -> pasta_cooked;
+//          toss_pasta: pasta_sauced -> pasta_tossed; season: patty_raw -> patty_seasoned; grill: (seasoned) patty -> patty;
+//          peel: potato -> potato_peeled; cut: potato_peeled -> potato_sticks; fry: potato_sticks -> fries;
 //          som tam: chili + chili merge into chili_2 / chili_3; pound: garlic + chilies -> paste_1..3 (redder with more chilies);
 //          toss (Mix): any paste + toppings -> som_tam_poo / som_tam_thai / som_tam_thai_no_peanuts ("base" may list several ids)
 //          a step with a "map" turns the top layer into its result (cut: rolls -> 6 pieces, pizzas -> sliced, with a knife chop)
@@ -133,17 +144,17 @@ Built for grade 10 English learners:
 
 ### Content status
 
-| Level | Restaurant | Guests | Dishes | Steps with mini-games | Art |
+| Level | Restaurant | Guests | Dishes | Animated steps | Art |
 |---|---|---|---|---|---|
-| r1 | Sakura Sushi (Japanese) | Daniel, Emma, Mrs. Sato | nigiri ×3, ikura gunkan, salmon roll, avocado-cucumber roll | Roll, Cut | Real sprite sheets |
-| r2 | Bella Trattoria (Italian) | Sofia, Nonna Lucia | Margherita, Mushroom Pizza, 2 spaghetti | Stretch, Boil, Bake, Cut | Mockup SVG |
-| r3 | Spicy Market (Thai som tam shop) | Mr. Somchai, Mai | Som Tam Poo (3 chilies, salted crab), Som Tam Thai no peanuts (1 chili) | Pound, Mix | Mockup SVG |
-| r4 | Lumière Café (Dessert) | Mrs. Dubois, Chloe | Berry Macaron Tower, Strawberry / Blueberry Pancakes | Flip (×2) | Mockup SVG |
-| r5 | Route 66 (American Diner) | Jess, Hank | Cheeseburger (± lettuce), French Fries (± salt) | Grill, Cut, Fry | Mockup SVG |
+| r1 | Sakura Sushi (Japanese) | Daniel, Emma, Mrs. Sato | nigiri ×3, ikura gunkan, salmon roll, avocado-cucumber roll | Shape rice, wasabi, slice fish/avocado/cucumber, wrap nori, spoon roe, spread rice, Roll, Cut | Real sprite sheets |
+| r2 | Bella Trattoria (Italian) | Sofia, Nonna Lucia | Margherita, Mushroom Pizza, 2 spaghetti | Knead, Stretch, spread sauce, place toppings, Bake, Cut; Boil, ladle sauce, Toss, grate parmesan | Mockup SVG |
+| r3 | Spicy Market (Thai som tam shop) | Mr. Somchai, Mai | Som Tam Poo (3 chilies, salted crab), Som Tam Thai no peanuts (1 chili) | Pound, halve tomatoes, fish sauce, lime, palm sugar, Mix | Mockup SVG |
+| r4 | Lumière Café (Dessert) | Mrs. Dubois, Chloe | Berry Macaron Tower, Strawberry / Blueberry Pancakes | Pour batter, Flip (two sides, ×2), syrup, place berries | Mockup SVG |
+| r5 | Route 66 (American Diner) | Jess, Hank | Cheeseburger (± lettuce), French Fries (± salt) | Season, Grill (two sides), slice tomato; Peel, Cut, Fry, Salt | Mockup SVG |
 
 All five levels are playable end to end.
 
-Ingredients carry a `kitchen` (`sushi`, `italian`, `thai`, `cafe` or `diner`) and each restaurant shows only its own, plus shared tools (Cut). Sushi: rice, salmon, tuna, nori_flat, avocado, cucumber, ikura, wasabi, ginger, soy_sauce, nori_wrap, rice_sheet + Roll. Italian: dough, tomato_sauce, mozzarella, basil, mushroom, spaghetti, parmesan + Bake.
+Ingredients carry a `kitchen` (`sushi`, `italian`, `thai`, `cafe` or `diner`) and each restaurant shows only its own, plus shared tools (Cut). Sushi: rice, salmon, tuna, nori_flat, avocado, cucumber, ikura, wasabi, ginger, soy_sauce, nori_wrap, rice_sheet + Roll. Italian: dough, tomato_sauce, mozzarella, basil, mushroom, spaghetti, parmesan + Knead, Stretch, Boil, Bake, Toss. Diner tools: Season, Grill, Fry, Peel.
 
 **r2–r5 art is mockup.** Everything in `public/assets/food/{italian,thai,cafe,diner}/` is generated SVG from `scripts/italian_mockups.py` and `scripts/more_mockups.py` (run `cd scripts && python3 italian_mockups.py && python3 more_mockups.py`). Characters still come from the sushi sheet `sushi/4.png` for every level. Replace the files with real art under the same names; plate layers share one 512×512 canvas centred on (256, 270) so toppings line up with the pizza.
 

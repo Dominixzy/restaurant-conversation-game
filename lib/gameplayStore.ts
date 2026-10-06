@@ -13,11 +13,6 @@ export interface ServedOrder {
   stars: number;
 }
 
-// How well a cooking step (Bake, Cut…) was done in its mini-game; plain ingredients have none.
-// 'under' / 'over' mean undercooked / overcooked (raw or burnt pizza, hard or soggy pasta).
-export type StepQuality = 'perfect' | 'ok' | 'bad' | 'under' | 'over' | null;
-export const isBadStep = (q: StepQuality) => q === 'bad' || q === 'under' || q === 'over';
-
 // A fresh customer: start their conversation with a neutral mood and an empty plate.
 const NEW_CUSTOMER = {
   phase: 'dialogue' as GamePhase,
@@ -26,7 +21,6 @@ const NEW_CUSTOMER = {
   score: 0,
   currentRecipeId: null,
   assembledIngredients: [] as string[],
-  stepQuality: [] as StepQuality[],
 };
 
 interface GameplayState {
@@ -41,12 +35,11 @@ interface GameplayState {
   // Cooking state
   currentRecipeId: string | null;
   assembledIngredients: string[];
-  stepQuality: StepQuality[]; // one entry per item in assembledIngredients
   
   // Actions
   startGame: (restaurantId: string) => void;
   makeChoice: (nextNodeId: string, moodChange: number, action?: string, recipeId?: string) => void;
-  addIngredient: (ingredientId: string, quality?: StepQuality) => void;
+  addIngredient: (ingredientId: string) => void;
   removeLastIngredient: () => void;
   clearIngredients: () => void;
   serveFood: (isCorrect: boolean) => void;
@@ -63,7 +56,6 @@ export const useGameplayStore = create<GameplayState>((set) => ({
   score: 0,
   currentRecipeId: null,
   assembledIngredients: [],
-  stepQuality: [],
   customerIndex: 0,
   served: [],
 
@@ -92,17 +84,15 @@ export const useGameplayStore = create<GameplayState>((set) => ({
     };
   }),
 
-  addIngredient: (ingredientId, quality = null) => set((state) => ({
-    assembledIngredients: [...state.assembledIngredients, ingredientId],
-    stepQuality: [...state.stepQuality, quality]
+  addIngredient: (ingredientId) => set((state) => ({
+    assembledIngredients: [...state.assembledIngredients, ingredientId]
   })),
 
   removeLastIngredient: () => set((state) => ({
-    assembledIngredients: state.assembledIngredients.slice(0, -1),
-    stepQuality: state.stepQuality.slice(0, -1)
+    assembledIngredients: state.assembledIngredients.slice(0, -1)
   })),
 
-  clearIngredients: () => set({ assembledIngredients: [], stepQuality: [] }),
+  clearIngredients: () => set({ assembledIngredients: [] }),
 
   serveFood: (isCorrect) => set((state) => {
     let finalStars = 0;
@@ -110,9 +100,6 @@ export const useGameplayStore = create<GameplayState>((set) => ({
       if (state.customerMood >= MOOD_HAPPY) finalStars = 3;
       else if (state.customerMood >= MOOD_OK) finalStars = 2;
       else finalStars = 1;
-      // Each badly done step (burnt, uneven cuts…) costs a star, but a correct dish keeps at least one.
-      const badSteps = state.stepQuality.filter(isBadStep).length;
-      finalStars = Math.max(1, finalStars - badSteps);
     } else {
       finalStars = 0; // failed
     }

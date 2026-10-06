@@ -46,13 +46,17 @@
   {"id": "potato", "name": "Potato", "icon": "bg-[url('/assets/food/diner/icons/potato.svg')] bg-contain bg-center bg-no-repeat", "image": "/assets/food/diner/potato.svg", "plate": {"size": 34, "x": 0, "y": 6, "lift": 0}, "kitchen": "diner"},
   {"id": "salt", "name": "Salt", "icon": "bg-[url('/assets/food/diner/icons/salt.svg')] bg-contain bg-center bg-no-repeat", "image": "/assets/food/diner/salt.svg", "plate": {"size": 50, "x": 0, "y": 6, "lift": 0}, "kitchen": "diner"},
   {"id": "roll", "name": "Roll", "icon": "bg-[url('/assets/food/sushi/2.png')] bg-[length:300%_200%] bg-[position:0%_100%]", "action": true, "kitchen": "sushi"},
+  {"id": "knead", "name": "Knead", "icon": "bg-[url('/assets/food/italian/icons/knead.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "italian"},
   {"id": "stretch", "name": "Stretch", "icon": "bg-[url('/assets/food/italian/icons/rolling-pin.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "italian"},
   {"id": "boil", "name": "Boil", "icon": "bg-[url('/assets/food/italian/icons/pot.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "italian"},
   {"id": "bake", "name": "Bake", "icon": "bg-[url('/assets/food/italian/icons/oven.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "italian"},
+  {"id": "toss_pasta", "name": "Toss", "icon": "bg-[url('/assets/food/italian/icons/toss.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "italian"},
   {"id": "pound", "name": "Pound", "icon": "bg-[url('/assets/food/thai/icons/mortar.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "thai"},
   {"id": "toss", "name": "Mix", "icon": "bg-[url('/assets/food/thai/icons/spoon.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "thai"},
   {"id": "flip", "name": "Flip", "icon": "bg-[url('/assets/food/cafe/icons/pan.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "cafe"},
+  {"id": "season", "name": "Season", "icon": "bg-[url('/assets/food/diner/icons/season.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "diner"},
   {"id": "grill", "name": "Grill", "icon": "bg-[url('/assets/food/diner/icons/grill.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "diner"},
   {"id": "fry", "name": "Fry", "icon": "bg-[url('/assets/food/diner/icons/fryer.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "diner"},
+  {"id": "peel", "name": "Peel", "icon": "bg-[url('/assets/food/diner/icons/peeler.svg')] bg-contain bg-center bg-no-repeat", "action": true, "kitchen": "diner"},
   {"id": "cut", "name": "Cut", "icon": "bg-[url('/assets/food/sushi/2.png')] bg-[length:300%_200%] bg-[position:0%_0%]", "action": true}
 ]

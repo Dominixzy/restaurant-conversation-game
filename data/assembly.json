@@ -242,6 +242,42 @@
         "y": 4,
         "lift": 0
       }
+    },
+    "dough_kneaded": {
+      "image": "/assets/food/italian/dough-ball.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "pasta_tossed": {
+      "image": "/assets/food/italian/pasta-sauced.svg",
+      "plate": {
+        "size": 58,
+        "x": 0,
+        "y": 4,
+        "lift": 0
+      }
+    },
+    "patty_seasoned": {
+      "image": "/assets/food/diner/patty-seasoned.svg",
+      "plate": {
+        "size": 46,
+        "x": 0,
+        "y": 14,
+        "lift": 5
+      }
+    },
+    "potato_peeled": {
+      "image": "/assets/food/diner/potato-peeled.svg",
+      "plate": {
+        "size": 34,
+        "x": 0,
+        "y": 6,
+        "lift": 0
+      }
     }
   },
   "merges": [
@@ -303,48 +339,33 @@
         "avocado": "roll_veg",
         "cucumber": "roll_veg"
       },
-      "game": {
-        "type": "hold",
-        "seconds": 1.2,
-        "prompt": "Hold to roll it up tight"
+      "anim": {
+        "type": "roll",
+        "title": "Roll it up"
       }
     },
     "stretch": {
       "map": {
-        "dough": "dough_flat"
+        "dough_kneaded": "dough_flat"
       },
-      "game": {
-        "type": "hold",
-        "seconds": 1.4,
-        "prompt": "Hold to stretch the dough"
+      "anim": {
+        "type": "stretch",
+        "title": "Stretch the dough",
+        "image": "/assets/food/italian/dough.svg",
+        "target": 27.0
       }
     },
     "boil": {
       "map": {
         "spaghetti": "pasta_cooked"
       },
-      "game": {
-        "type": "timing",
-        "seconds": 3.2,
-        "prompt": "Boil the pasta",
-        "stop": "Drain it!",
-        "zones": [
-          {
-            "to": 50,
-            "label": "Hard",
-            "quality": "under"
-          },
-          {
-            "to": 78,
-            "label": "Al dente",
-            "quality": "perfect"
-          },
-          {
-            "to": 100,
-            "label": "Soggy",
-            "quality": "over"
-          }
-        ]
+      "anim": {
+        "type": "cook",
+        "title": "Boil the pasta",
+        "size": 62,
+        "vessel": "pot",
+        "hint": "Al dente: soft with a little bite!",
+        "done": "Al dente!"
       }
     },
     "bake": {
@@ -353,28 +374,13 @@
         "mushroom": "pizza_funghi",
         "mozzarella": "pizza_margherita"
       },
-      "game": {
-        "type": "timing",
-        "seconds": 3,
-        "prompt": "Bake the pizza",
-        "stop": "Take it out!",
-        "zones": [
-          {
-            "to": 52,
-            "label": "Raw",
-            "quality": "under"
-          },
-          {
-            "to": 80,
-            "label": "Golden",
-            "quality": "perfect"
-          },
-          {
-            "to": 100,
-            "label": "Burnt",
-            "quality": "over"
-          }
-        ]
+      "anim": {
+        "type": "cook",
+        "title": "Bake the pizza",
+        "size": 66,
+        "vessel": "oven",
+        "hint": "Golden and bubbly!",
+        "done": "Golden!"
       }
     },
     "pound": {
@@ -384,11 +390,16 @@
         "chili_2": "paste_2",
         "chili": "paste_1"
       },
-      "game": {
+      "anim": {
         "type": "pound",
-        "taps": 10,
-        "seconds": 3,
-        "prompt": "Tap fast to pound the garlic and chili!"
+        "title": "Pound the garlic and chili",
+        "backdrop": "/assets/food/thai/plate.svg",
+        "chunks": 9,
+        "colors": [
+          "#f3ead2",
+          "#d42a1c",
+          "#e8402e"
+        ]
       }
     },
     "toss": {
@@ -402,94 +413,53 @@
         "peanuts": "som_tam_thai",
         "dried_shrimp": "som_tam_thai_no_peanuts"
       },
-      "game": {
-        "type": "hold",
-        "seconds": 1.4,
-        "prompt": "Hold to pound and mix everything together"
+      "anim": {
+        "type": "stir",
+        "title": "Pound and mix",
+        "backdrop": "/assets/food/thai/plate.svg",
+        "turns": 3
       }
     },
     "flip": {
       "map": {
         "batter": "pancake"
       },
-      "game": {
-        "type": "timing",
-        "seconds": 3,
-        "prompt": "Cook the pancake",
-        "stop": "Flip it!",
-        "zones": [
-          {
-            "to": 50,
-            "label": "Pale",
-            "quality": "under"
-          },
-          {
-            "to": 78,
-            "label": "Golden",
-            "quality": "perfect"
-          },
-          {
-            "to": 100,
-            "label": "Burnt",
-            "quality": "over"
-          }
-        ]
+      "anim": {
+        "type": "cook",
+        "title": "Cook the pancake",
+        "size": 60,
+        "vessel": "pan",
+        "sides": 2,
+        "hint": "Golden brown underneath!",
+        "done": "Golden!"
       }
     },
     "grill": {
       "map": {
+        "patty_seasoned": "patty",
         "patty_raw": "patty"
       },
-      "game": {
-        "type": "timing",
-        "seconds": 3,
-        "prompt": "Grill the patty",
-        "stop": "Take it off!",
-        "zones": [
-          {
-            "to": 50,
-            "label": "Raw",
-            "quality": "under"
-          },
-          {
-            "to": 78,
-            "label": "Juicy",
-            "quality": "perfect"
-          },
-          {
-            "to": 100,
-            "label": "Burnt",
-            "quality": "over"
-          }
-        ]
+      "anim": {
+        "type": "cook",
+        "title": "Grill the patty",
+        "size": 64,
+        "vessel": "grill",
+        "sides": 2,
+        "hint": "Juicy and brown!",
+        "done": "Juicy!"
       }
     },
     "fry": {
       "map": {
         "potato_sticks": "fries"
       },
-      "game": {
-        "type": "timing",
-        "seconds": 3,
-        "prompt": "Fry the potatoes",
-        "stop": "Lift the basket!",
-        "zones": [
-          {
-            "to": 50,
-            "label": "Pale",
-            "quality": "under"
-          },
-          {
-            "to": 78,
-            "label": "Crispy",
-            "quality": "perfect"
-          },
-          {
-            "to": 100,
-            "label": "Burnt",
-            "quality": "over"
-          }
-        ]
+      "anim": {
+        "type": "cook",
+        "title": "Fry the potatoes",
+        "size": 64,
+        "vessel": "fryer",
+        "hint": "Golden and crispy!",
+        "done": "Crispy!"
       }
     },
     "cut": {
@@ -498,12 +468,733 @@
         "roll_veg": "cut_veg",
         "pizza_margherita": "pizza_margherita_cut",
         "pizza_funghi": "pizza_funghi_cut",
-        "potato": "potato_sticks"
+        "potato_peeled": "potato_sticks"
       },
-      "game": {
-        "type": "slice",
-        "marks": 3,
-        "prompt": "Tap when the knife is over each mark"
+      "anim": {
+        "type": "swipe",
+        "title": "Cut the roll",
+        "size": 92,
+        "rotate": 25,
+        "cuts": [
+          {
+            "x": 25,
+            "y": 37.5,
+            "angle": 90,
+            "length": 26
+          },
+          {
+            "x": 37.5,
+            "y": 37.5,
+            "angle": 90,
+            "length": 26
+          },
+          {
+            "x": 50,
+            "y": 37.5,
+            "angle": 90,
+            "length": 26
+          },
+          {
+            "x": 62.5,
+            "y": 37.5,
+            "angle": 90,
+            "length": 26
+          },
+          {
+            "x": 75,
+            "y": 37.5,
+            "angle": 90,
+            "length": 26
+          }
+        ]
+      },
+      "anims": {
+        "roll_salmon": {
+          "type": "swipe",
+          "title": "Cut the roll",
+          "size": 92,
+          "rotate": 25,
+          "cuts": [
+            {
+              "x": 25,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 37.5,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 50,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 62.5,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 75,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            }
+          ]
+        },
+        "roll_veg": {
+          "type": "swipe",
+          "title": "Cut the roll",
+          "size": 92,
+          "rotate": 25,
+          "cuts": [
+            {
+              "x": 25,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 37.5,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 50,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 62.5,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            },
+            {
+              "x": 75,
+              "y": 37.5,
+              "angle": 90,
+              "length": 26
+            }
+          ]
+        },
+        "pizza_margherita": {
+          "type": "swipe",
+          "title": "Slice the pizza",
+          "size": 92,
+          "cuts": [
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 0,
+              "length": 58
+            },
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 60,
+              "length": 58
+            },
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 120,
+              "length": 58
+            }
+          ]
+        },
+        "pizza_funghi": {
+          "type": "swipe",
+          "title": "Slice the pizza",
+          "size": 92,
+          "cuts": [
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 0,
+              "length": 58
+            },
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 60,
+              "length": 58
+            },
+            {
+              "x": 50,
+              "y": 40,
+              "angle": 120,
+              "length": 58
+            }
+          ]
+        },
+        "potato_peeled": {
+          "type": "swipe",
+          "title": "Cut into sticks",
+          "image": "/assets/food/diner/potato-peeled.svg",
+          "size": 110,
+          "cuts": [
+            {
+              "x": 38,
+              "y": 37,
+              "angle": 90,
+              "length": 30
+            },
+            {
+              "x": 46,
+              "y": 37,
+              "angle": 90,
+              "length": 30
+            },
+            {
+              "x": 54,
+              "y": 37,
+              "angle": 90,
+              "length": 30
+            },
+            {
+              "x": 62,
+              "y": 37,
+              "angle": 90,
+              "length": 30
+            }
+          ]
+        }
+      }
+    },
+    "knead": {
+      "map": {
+        "dough": "dough_kneaded"
+      },
+      "anim": {
+        "type": "stir",
+        "title": "Knead the dough",
+        "image": "/assets/food/italian/dough-ball.svg",
+        "size": 62,
+        "turns": 3,
+        "look": "knead"
+      }
+    },
+    "toss_pasta": {
+      "map": {
+        "pasta_sauced": "pasta_tossed"
+      },
+      "anim": {
+        "type": "stir",
+        "title": "Toss the pasta",
+        "turns": 2
+      }
+    },
+    "season": {
+      "map": {
+        "patty_raw": "patty_seasoned"
+      },
+      "anim": {
+        "type": "spread",
+        "title": "Season the patty",
+        "image": "/assets/food/diner/patty-raw.svg",
+        "size": 100,
+        "brush": "dots",
+        "colors": [
+          "#1f1f1f",
+          "#ffffff",
+          "#3a3a3a"
+        ],
+        "radius": 6,
+        "shape": {
+          "x": 50,
+          "y": 34,
+          "rx": 30,
+          "ry": 8
+        },
+        "done": "Well seasoned!"
+      }
+    },
+    "peel": {
+      "map": {
+        "potato": "potato_peeled"
+      },
+      "anim": {
+        "type": "spread",
+        "title": "Peel the potato",
+        "image": "/assets/food/diner/potato.svg",
+        "size": 110,
+        "brush": "solid",
+        "colors": [
+          "#f6e3a6"
+        ],
+        "radius": 5,
+        "shape": {
+          "x": 50,
+          "y": 36.5,
+          "rx": 23,
+          "ry": 12.5
+        },
+        "done": "All peeled!"
+      }
+    }
+  },
+  "prep": {
+    "rice": {
+      "anim": {
+        "type": "measure",
+        "title": "Shape the rice",
+        "look": "press",
+        "color": "#f4efe2",
+        "done": "Nice shape!"
+      }
+    },
+    "wasabi": {
+      "anim": {
+        "type": "measure",
+        "title": "Add the wasabi",
+        "look": "scoop",
+        "color": "#9cc94a",
+        "done": "Just a little!"
+      }
+    },
+    "salmon": {
+      "anim": {
+        "type": "swipe",
+        "title": "Slice the salmon",
+        "sprite": [
+          1,
+          0
+        ],
+        "size": 78,
+        "cuts": [
+          {
+            "x": 50,
+            "y": 37,
+            "angle": -62,
+            "length": 34
+          }
+        ]
+      }
+    },
+    "tuna": {
+      "anim": {
+        "type": "swipe",
+        "title": "Slice the tuna",
+        "sprite": [
+          2,
+          0
+        ],
+        "size": 78,
+        "cuts": [
+          {
+            "x": 50,
+            "y": 37,
+            "angle": -62,
+            "length": 34
+          }
+        ]
+      }
+    },
+    "ikura": {
+      "anim": {
+        "type": "measure",
+        "title": "Spoon on the roe",
+        "look": "scoop",
+        "color": "#f05a1a",
+        "done": "Nicely filled!"
+      }
+    },
+    "nori_wrap": {
+      "anim": {
+        "type": "stir",
+        "title": "Wrap the nori",
+        "turns": 1,
+        "look": "wrap"
+      }
+    },
+    "rice_sheet": {
+      "anim": {
+        "type": "spread",
+        "title": "Spread the rice",
+        "sprite": [
+          3,
+          0
+        ],
+        "size": 82,
+        "brush": "rice",
+        "colors": [
+          "#f7f3e8",
+          "#ffffff",
+          "#ddd5c4"
+        ],
+        "radius": 6,
+        "shape": {
+          "x": 50,
+          "y": 45,
+          "rx": 29,
+          "ry": 19,
+          "rect": true
+        },
+        "done": "Nice and even!"
+      }
+    },
+    "avocado": {
+      "anim": {
+        "type": "swipe",
+        "title": "Slice the avocado",
+        "sprite": [
+          0,
+          1
+        ],
+        "size": 72,
+        "cuts": [
+          {
+            "x": 42,
+            "y": 37,
+            "angle": -62,
+            "length": 30
+          },
+          {
+            "x": 54,
+            "y": 37,
+            "angle": -62,
+            "length": 30
+          }
+        ]
+      }
+    },
+    "cucumber": {
+      "anim": {
+        "type": "swipe",
+        "title": "Cut the cucumber",
+        "sprite": [
+          1,
+          1
+        ],
+        "size": 72,
+        "cuts": [
+          {
+            "x": 50,
+            "y": 31,
+            "angle": 28,
+            "length": 40
+          },
+          {
+            "x": 50,
+            "y": 41,
+            "angle": 28,
+            "length": 40
+          }
+        ]
+      }
+    },
+    "tomato_sauce": {
+      "anim": {
+        "type": "spread",
+        "title": "Spread the sauce",
+        "image": "/assets/food/italian/dough.svg",
+        "size": 90,
+        "brush": "solid",
+        "colors": [
+          "#d23a22"
+        ],
+        "radius": 6,
+        "shape": {
+          "x": 50,
+          "y": 40,
+          "rx": 31,
+          "ry": 21
+        },
+        "done": "Nice and even!"
+      },
+      "anims": {
+        "pasta_cooked": {
+          "type": "measure",
+          "title": "Add the sauce",
+          "look": "pour",
+          "color": "#c0392b",
+          "done": "Just right!"
+        }
+      }
+    },
+    "mozzarella": {
+      "anim": {
+        "type": "scatter",
+        "title": "Add the mozzarella",
+        "spots": [
+          [
+            64.9,
+            44.8
+          ],
+          [
+            50.4,
+            50.0
+          ],
+          [
+            35.5,
+            45.2
+          ],
+          [
+            35.1,
+            35.2
+          ],
+          [
+            49.6,
+            30.0
+          ],
+          [
+            64.5,
+            34.8
+          ],
+          [
+            50,
+            40
+          ]
+        ],
+        "piece": 14
+      }
+    },
+    "mushroom": {
+      "anim": {
+        "type": "scatter",
+        "title": "Add the mushrooms",
+        "spots": [
+          [
+            67.6,
+            42.2
+          ],
+          [
+            55.7,
+            50.4
+          ],
+          [
+            38.1,
+            48.2
+          ],
+          [
+            32.4,
+            37.8
+          ],
+          [
+            44.3,
+            29.6
+          ],
+          [
+            61.9,
+            31.8
+          ],
+          [
+            50,
+            40
+          ]
+        ],
+        "piece": 13
+      }
+    },
+    "basil": {
+      "anim": {
+        "type": "scatter",
+        "title": "Add the basil",
+        "spots": [
+          [
+            42,
+            36
+          ],
+          [
+            57,
+            41
+          ],
+          [
+            50,
+            30
+          ]
+        ],
+        "piece": 13
+      }
+    },
+    "parmesan": {
+      "anim": {
+        "type": "spread",
+        "title": "Grate the parmesan",
+        "brush": "dots",
+        "colors": [
+          "#fff3c4",
+          "#f2dc8e",
+          "#e8cf7a"
+        ],
+        "radius": 5,
+        "shape": {
+          "x": 50,
+          "y": 36,
+          "rx": 12,
+          "ry": 8
+        },
+        "done": "Nicely grated!"
+      }
+    },
+    "cherry_tomato": {
+      "anim": {
+        "type": "swipe",
+        "title": "Halve the tomatoes",
+        "image": "/assets/food/thai/icons/tomato.svg",
+        "size": 70,
+        "cuts": [
+          {
+            "x": 50,
+            "y": 37.5,
+            "angle": 90,
+            "length": 38
+          }
+        ]
+      }
+    },
+    "fish_sauce": {
+      "anim": {
+        "type": "measure",
+        "title": "Add fish sauce",
+        "look": "pour",
+        "color": "#8a4a14",
+        "done": "Just right!"
+      }
+    },
+    "lime": {
+      "anim": {
+        "type": "measure",
+        "title": "Squeeze the lime",
+        "look": "pour",
+        "color": "#c8e86a",
+        "done": "Just right!"
+      }
+    },
+    "palm_sugar": {
+      "anim": {
+        "type": "measure",
+        "title": "Add palm sugar",
+        "look": "scoop",
+        "color": "#c8873a",
+        "done": "Just right!"
+      }
+    },
+    "batter": {
+      "anim": {
+        "type": "measure",
+        "title": "Pour the batter",
+        "look": "pour",
+        "color": "#f3dfa8",
+        "done": "Perfect size!"
+      }
+    },
+    "syrup": {
+      "anim": {
+        "type": "measure",
+        "title": "Pour the syrup",
+        "look": "pour",
+        "color": "#b5651d",
+        "done": "Just right!"
+      }
+    },
+    "strawberries": {
+      "anim": {
+        "type": "scatter",
+        "title": "Add strawberries",
+        "spots": [
+          [
+            61.5,
+            31.8
+          ],
+          [
+            50.2,
+            36.0
+          ],
+          [
+            38.6,
+            31.9
+          ],
+          [
+            42.8,
+            25.2
+          ],
+          [
+            56.9,
+            25.1
+          ]
+        ],
+        "piece": 13
+      }
+    },
+    "blueberries": {
+      "anim": {
+        "type": "scatter",
+        "title": "Add blueberries",
+        "spots": [
+          [
+            61.5,
+            31.8
+          ],
+          [
+            50.2,
+            36.0
+          ],
+          [
+            38.6,
+            31.9
+          ],
+          [
+            42.8,
+            25.2
+          ],
+          [
+            56.9,
+            25.1
+          ]
+        ],
+        "piece": 12
+      }
+    },
+    "tomato": {
+      "anim": {
+        "type": "swipe",
+        "title": "Slice the tomato",
+        "image": "/assets/food/diner/icons/tomato.svg",
+        "size": 70,
+        "cuts": [
+          {
+            "x": 42,
+            "y": 40,
+            "angle": 90,
+            "length": 40
+          },
+          {
+            "x": 58,
+            "y": 40,
+            "angle": 90,
+            "length": 40
+          }
+        ]
+      }
+    },
+    "salt": {
+      "anim": {
+        "type": "spread",
+        "title": "Salt the fries",
+        "image": "/assets/food/diner/fries.svg",
+        "size": 100,
+        "brush": "dots",
+        "colors": [
+          "#ffffff",
+          "#e9eef0"
+        ],
+        "radius": 6,
+        "shape": {
+          "x": 50,
+          "y": 36,
+          "rx": 26,
+          "ry": 17
+        },
+        "done": "Well salted!"
       }
     }
   }

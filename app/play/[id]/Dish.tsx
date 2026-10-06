@@ -2,10 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import ingredientsData from "@/data/ingredients.json";
-import type { StepQuality } from "@/lib/gameplayStore";
 import assemblyData from "@/data/assembly.json";
 
-type Cell = number[]; // [column, row] in the 4x4 sheet /assets/food/sushi/1.png
+export type Cell = number[]; // [column, row] in the 4x4 sheet /assets/food/sushi/1.png
 
 interface PlateLayout {
   size: number; // width as % of the plate area
@@ -41,15 +40,38 @@ interface Action {
   base?: string | string[];
   fillings?: Record<string, string>;
   map?: Record<string, string>;
-  game?: MiniGame;
+  anim?: StepAnim;
+  anims?: Record<string, StepAnim>; // a different animation depending on what is on top of the plate
 }
 
-// The mini-game played when the step is used (see MiniGame.tsx).
-export type MiniGame =
-  | { type: "timing"; seconds: number; prompt: string; stop: string; zones: { to: number; label: string; quality: StepQuality }[] }
-  | { type: "hold"; seconds: number; prompt: string }
-  | { type: "slice"; marks: number; prompt: string }
-  | { type: "pound"; taps: number; seconds: number; prompt: string };
+// Positions are in stage units: the animation stage is 100 wide and 75 tall, (50, 37.5) is its centre.
+type Point = number[]; // [x, y]
+
+// The animation the kitchen plays by itself when a step or ingredient is used (see StepAnimation.tsx).
+// cook: the food cooks in a pot / oven / pan / grill / fryer (and flips halfway with sides: 2).
+// swipe: the knife cuts along each line.     spread: sauce, rice or seasoning is brushed over the area.
+// scatter: toppings drop onto their spots.   measure: a bottle or spoon pours (or hands press the rice).
+// stir: a spoon (or hands) goes round.       roll: the bamboo mat rolls up.
+// stretch: the dough is rolled out wider.    pound: the pestle crushes every chunk in the mortar.
+export type StepAnim = {
+  title?: string; // caption, e.g. "Slice the salmon"; defaults to the step's name
+  done?: string; // shown when it finishes, e.g. "Golden!"
+  image?: string; // picture to work on instead of the plate (centred, `size` units wide)
+  sprite?: Cell;
+  size?: number;
+  rotate?: number;
+  backdrop?: string; // drawn behind the food, e.g. the mortar
+} & (
+  | { type: "cook"; vessel: "oven" | "pot" | "pan" | "grill" | "fryer"; sides?: number; hint?: string }
+  | { type: "swipe"; cuts: { x: number; y: number; angle: number; length: number }[] }
+  | { type: "spread"; brush: "solid" | "dots" | "rice"; colors: string[]; radius?: number; shape: { x: number; y: number; rx: number; ry: number; rect?: boolean } }
+  | { type: "scatter"; spots: Point[]; piece?: number }
+  | { type: "measure"; look: "pour" | "press" | "scoop"; color?: string }
+  | { type: "stir"; turns: number; look?: "stir" | "wrap" | "knead" }
+  | { type: "roll" }
+  | { type: "stretch"; target: number }
+  | { type: "pound"; chunks: number; colors: string[] }
+);
 
 interface Composite {
   image?: string;
@@ -58,10 +80,11 @@ interface Composite {
 }
 
 const ingredients = ingredientsData as Ingredient[];
-const assembly = assemblyData as {
+const assembly = assemblyData as unknown as {
   composites: Record<string, Composite>;
   merges: { from: string[]; into: string }[];
   actions: Record<string, Action>;
+  prep: Record<string, Pick<Action, "anim" | "anims">>; // animations for adding an ingredient (slice the fish, pour the sauce…)
 };
 
 // Food on the plate is drawn a bit larger than the raw layout numbers so it fills the plate.
@@ -76,15 +99,23 @@ export function spriteCell([col, row]: Cell): React.CSSProperties {
   };
 }
 
-type Visual = { id: string; plate: PlateLayout; sprite?: Cell; image?: string; pieces?: Pieces; filter?: string; messy?: boolean };
+export type Visual = { id: string; plate: PlateLayout; sprite?: Cell; image?: string; pieces?: Pieces };
 
-// Under- or overcooked food is drawn paler or darker.
-const COOKED_LOOK: Partial<Record<NonNullable<StepQuality>, string>> = {
-  under: "saturate(0.65) brightness(1.08)",
-  over: "brightness(0.6) sepia(0.5) saturate(1.4)",
-};
+// The animation for using a step or ingredient on the plate built from `ids`.
+export function animFor(id: string, ids: string[]): StepAnim | undefined {
+  const entry = assembly.actions[id] ?? assembly.prep[id];
+  if (!entry) return undefined;
+  const top = topLayer(ids)?.id;
+  return (top && entry.anims?.[top]) || entry.anim;
+}
 
-export const gameFor = (id: string) => assembly.actions[id]?.game;
+// The top layer of the plate (ignoring side garnishes), e.g. the roll that Cut will slice.
+export function topLayer(ids: string[]) {
+  return buildPlate(ids).findLast((l) => !l.plate.side) ?? null;
+}
+
+// Whether the step reshapes what is already on the plate (Roll, Grill…) rather than adding to it.
+export const isMapStep = (id: string) => !!assembly.actions[id]?.map;
 
 // Whether using a step right now would change the food (e.g. Bake only works on a sauced pizza).
 export function stepChangesPlate(ids: string[], id: string) {
@@ -101,13 +132,12 @@ function visualFor(id: string): Visual | null {
 
 // Replays what the player did and works out what is physically on the plate, e.g.
 // nori + rice sheet become one sheet, Roll turns the sheet and its fillings into a roll, Cut slices it.
-function buildPlate(ids: string[], quality: StepQuality[] = []): Visual[] {
+function buildPlate(ids: string[]): Visual[] {
   const layers: Visual[] = [];
   const topIndex = () => layers.findLastIndex((l) => !l.plate.side);
 
-  for (const [step, id] of ids.entries()) {
+  for (const id of ids) {
     const action = assembly.actions[id];
-    const q = quality[step] ?? null;
     if (action?.base) {
       const bases = ([] as string[]).concat(action.base);
       const baseAt = layers.findIndex((l) => bases.includes(l.id));
@@ -116,14 +146,13 @@ function buildPlate(ids: string[], quality: StepQuality[] = []): Visual[] {
       const into = Object.entries(action.fillings ?? {}).find(([filling]) => on.includes(filling))?.[1];
       if (!into) continue;
       const sides = layers.filter((l, i) => i < baseAt || l.plate.side);
-      const made = { ...visualFor(into)!, filter: (q && COOKED_LOOK[q]) || layers[baseAt].filter };
-      layers.splice(0, layers.length, ...sides, made);
+      layers.splice(0, layers.length, ...sides, visualFor(into)!);
       continue;
     }
     if (action?.map) {
       const at = topIndex();
       const into = at >= 0 ? action.map[layers[at].id] : undefined;
-      if (into) layers[at] = { ...visualFor(into)!, filter: (q && COOKED_LOOK[q]) || layers[at].filter, messy: q === "bad" };
+      if (into) layers[at] = visualFor(into)!;
       continue;
     }
 
@@ -131,7 +160,7 @@ function buildPlate(ids: string[], quality: StepQuality[] = []): Visual[] {
     if (!next) continue;
     const at = topIndex();
     const merge = at >= 0 && !next.plate.side && assembly.merges.find((m) => m.from[0] === layers[at].id && m.from[1] === id);
-    if (merge) layers[at] = { ...visualFor(merge.into)!, filter: layers[at].filter };
+    if (merge) layers[at] = visualFor(merge.into)!;
     else layers.push(next);
   }
   return layers;
@@ -159,12 +188,12 @@ function layoutStack(layers: Visual[]) {
   });
 }
 
-function Art({ visual }: { visual: { sprite?: Cell; image?: string; filter?: string } }) {
+export function Art({ visual }: { visual: { sprite?: Cell; image?: string } }) {
   if (visual.image) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={visual.image} alt="" draggable={false} className="w-full h-auto select-none" style={{ filter: visual.filter }} />;
+    return <img src={visual.image} alt="" draggable={false} className="w-full h-auto select-none" />;
   }
-  return <div className="w-full aspect-square" style={{ ...spriteCell(visual.sprite!), filter: visual.filter }} />;
+  return <div className="w-full aspect-square" style={spriteCell(visual.sprite!)} />;
 }
 
 // Positions and centres a layer. The centring lives on this plain wrapper, not inside the
@@ -187,21 +216,20 @@ const PIECE_SPOTS: Record<number, number[][]> = {
   6: [[-22, -9, -4], [0, -11, 0], [22, -9, 4], [-22, 11, -4], [0, 9, 0], [22, 11, 4]],
 };
 
-export function ServedPieces({ pieces, size, spread = 1.12, offsetY = 0, delay = 0, filter, messy = false }: { pieces: Pieces; size?: number; spread?: number; offsetY?: number; delay?: number; filter?: string; messy?: boolean }) {
+export function ServedPieces({ pieces, size, spread = 1.12, offsetY = 0, delay = 0 }: { pieces: Pieces; size?: number; spread?: number; offsetY?: number; delay?: number }) {
   const spots = PIECE_SPOTS[pieces.count] ?? PIECE_SPOTS[1];
   const width = size ?? pieces.size ?? (pieces.count >= 6 ? 30 : pieces.count === 1 ? 86 : 44);
   return (
     <>
       {spots.map(([x, y, r], i) => (
-        // Badly cut pieces come out crooked and uneven.
-        <Spot key={i} left={50 + x * spread + (messy ? ((i * 37) % 7) - 3 : 0)} top={50 + offsetY + y * spread + (messy ? ((i * 53) % 5) - 2 : 0)} width={width * (messy ? 0.85 + ((i * 29) % 4) * 0.08 : 1)} z={40 + Math.round(y)} rotate={r + (messy ? ((i * 41) % 25) - 12 : 0)}>
+        <Spot key={i} left={50 + x * spread} top={50 + offsetY + y * spread} width={width} z={40 + Math.round(y)} rotate={r}>
           <motion.div
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: delay + i * 0.06, type: "spring", bounce: 0.5 }}
             className={SHADOW}
           >
-            <Art visual={{ ...pieces, filter }} />
+            <Art visual={pieces} />
           </motion.div>
         </Spot>
       ))}
@@ -233,17 +261,17 @@ function KnifeChop() {
 }
 
 // Live plate in the kitchen. Once the plate matches the recipe, it is served as the finished dish.
-export function PlateStack({ ids, quality, final, complete }: { ids: string[]; quality: StepQuality[]; final?: Final; complete: boolean }) {
-  const layers = buildPlate(ids, quality);
+// `still` draws it without the drop-in animations (used as the backdrop of a mini-game).
+export function PlateStack({ ids, final, complete, still = false }: { ids: string[]; final?: Final; complete: boolean; still?: boolean }) {
+  const layers = buildPlate(ids);
   const placed = layoutStack(layers);
   const lastId = ids[ids.length - 1];
-  const before = lastId && assembly.actions[lastId] ? layoutStack(buildPlate(ids.slice(0, -1), quality)) : [];
+  const before = !still && lastId && assembly.actions[lastId] ? layoutStack(buildPlate(ids.slice(0, -1))) : [];
   const changed = before.length > 0 && before[before.length - 1].visual.id !== placed[placed.length - 1]?.visual.id;
   const justCut = lastId === "cut" && changed;
   const justBaked = lastId === "bake" && changed;
   const uncut = justCut ? before.findLast((l) => !l.visual.plate.side) : undefined;
   const showFinal = complete && !!final;
-  const top = layers.findLast((l) => !l.plate.side);
 
   return (
     <div className="absolute inset-0">
@@ -274,13 +302,14 @@ export function PlateStack({ ids, quality, final, complete }: { ids: string[]; q
           placed.map(({ key, visual, top, left, width, z }) =>
             visual.pieces ? (
               <motion.div key={key} className="absolute inset-0" style={{ zIndex: z }} exit={{ opacity: 0 }}>
-                <ServedPieces pieces={visual.pieces} offsetY={PIECES_ON_PLATE_Y} delay={CHOP_MS / 1000} filter={visual.filter} messy={visual.messy} />
+                <ServedPieces pieces={visual.pieces} offsetY={PIECES_ON_PLATE_Y} delay={CHOP_MS / 1000} />
               </motion.div>
             ) : (
               <Spot key={key} left={left} top={top} width={width} z={z}>
                 <motion.div
                   initial={
-                    lastId && assembly.actions[lastId] && key === placed[placed.length - 1].key
+                    still ? false
+                    : lastId && assembly.actions[lastId] && key === placed[placed.length - 1].key
                       ? lastId === "roll" ? { opacity: 0, scaleY: 0.3 } : { opacity: 0, scale: 0.92 }
                       : { y: -200, opacity: 0, scale: 0.5, rotate: -15 }
                   }
@@ -301,7 +330,7 @@ export function PlateStack({ ids, quality, final, complete }: { ids: string[]; q
               animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.95, 1.05, 0.95] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <ServedPieces pieces={final!} offsetY={PIECES_ON_PLATE_Y} delay={justCut ? CHOP_MS / 1000 : 0} filter={top?.filter} messy={top?.messy} />
+            <ServedPieces pieces={final!} offsetY={PIECES_ON_PLATE_Y} delay={justCut ? CHOP_MS / 1000 : 0} />
           </motion.div>
         )}
       </AnimatePresence>
