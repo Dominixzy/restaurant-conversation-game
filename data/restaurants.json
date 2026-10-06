@@ -61,15 +61,15 @@
     "description": "Ask for recommendations and describe classic Mediterranean menu items.",
     "kitchen": "italian",
     "scene": {
-      "dining": "/assets/food/italian/dining.svg",
-      "counter": "/assets/food/italian/counter.svg",
+      "dining": "/assets/food/italian/dining.jpg",
+      "counter": "/assets/food/italian/counter.jpg",
       "mat": {
-        "image": "/assets/food/italian/cloth.svg",
+        "image": "/assets/food/italian/cloth.png",
         "size": "contain",
         "position": "center"
       },
       "plate": {
-        "image": "/assets/food/italian/board.svg",
+        "image": "/assets/food/italian/board.png",
         "size": "contain",
         "position": "center"
       }
@@ -103,10 +103,10 @@
     "description": "Order papaya salad, choose a spice level by the number of chilies, and handle a food allergy.",
     "kitchen": "thai",
     "scene": {
-      "dining": "/assets/food/thai/dining.svg",
-      "counter": "/assets/food/thai/counter.svg",
+      "dining": "/assets/food/thai/dining.jpg",
+      "counter": "/assets/food/thai/counter.jpg",
       "mat": {
-        "image": "/assets/food/thai/mat.svg",
+        "image": "/assets/food/thai/mat.png",
         "size": "contain",
         "position": "center"
       },
@@ -145,15 +145,15 @@
     "description": "Engage in elegant small talk and inquire about seasonal pastries.",
     "kitchen": "cafe",
     "scene": {
-      "dining": "/assets/food/cafe/dining.svg",
-      "counter": "/assets/food/cafe/counter.svg",
+      "dining": "/assets/food/cafe/dining.jpg",
+      "counter": "/assets/food/cafe/counter.jpg",
       "mat": {
-        "image": "/assets/food/cafe/mat.svg",
+        "image": "/assets/food/cafe/mat.png",
         "size": "contain",
         "position": "center"
       },
       "plate": {
-        "image": "/assets/food/cafe/plate.svg",
+        "image": "/assets/food/cafe/plate.png",
         "size": "contain",
         "position": "center"
       }
@@ -187,15 +187,15 @@
     "description": "Navigate casual, fast-paced ordering and clarify mistakes smoothly.",
     "kitchen": "diner",
     "scene": {
-      "dining": "/assets/food/diner/dining.svg",
-      "counter": "/assets/food/diner/counter.svg",
+      "dining": "/assets/food/diner/dining.jpg",
+      "counter": "/assets/food/diner/counter.jpg",
       "mat": {
-        "image": "/assets/food/diner/mat.svg",
+        "image": "/assets/food/diner/mat.png",
         "size": "contain",
         "position": "center"
       },
       "plate": {
-        "image": "/assets/food/diner/plate.svg",
+        "image": "/assets/food/diner/plate.png",
         "size": "contain",
         "position": "center"
       }

@@ -149,16 +149,16 @@ Built for grade 10 English learners:
 | Level | Restaurant | Guests | Dishes | Animated steps | Art |
 |---|---|---|---|---|---|
 | r1 | Sakura Sushi (Japanese) | Daniel, Emma, Mrs. Sato | nigiri ×3, ikura gunkan, salmon roll, avocado-cucumber roll | Shape rice, wasabi, slice fish/avocado/cucumber, wrap nori, spoon roe, spread rice, Roll, Cut | Real sprite sheets |
-| r2 | Bella Trattoria (Italian) | Sofia, Nonna Lucia | Margherita, Mushroom Pizza, 2 spaghetti | Knead, Stretch, spread sauce, place toppings, Bake, Cut; Boil, ladle sauce, Toss, grate parmesan | Mockup SVG |
-| r3 | Spicy Market (Thai som tam shop) | Mr. Somchai, Mai | Som Tam Poo (3 chilies, salted crab), Som Tam Thai no peanuts (1 chili) | Pound, halve tomatoes, fish sauce, lime, palm sugar, Mix | Mockup SVG |
-| r4 | Lumière Café (Dessert) | Mrs. Dubois, Chloe | Berry Macaron Tower, Strawberry / Blueberry Pancakes | Pour batter, Flip (two sides, ×2), syrup, place berries | Mockup SVG |
-| r5 | Route 66 (American Diner) | Jess, Hank | Cheeseburger (± lettuce), French Fries (± salt) | Season, Grill (two sides), slice tomato; Peel, Cut, Fry, Salt | Mockup SVG |
+| r2 | Bella Trattoria (Italian) | Sofia, Nonna Lucia | Margherita, Mushroom Pizza, 2 spaghetti | Knead, Stretch, spread sauce, place toppings, Bake, Cut; Boil, ladle sauce, Toss, grate parmesan | Generated art (v1) |
+| r3 | Spicy Market (Thai som tam shop) | Mr. Somchai, Mai | Som Tam Poo (3 chilies, salted crab), Som Tam Thai no peanuts (1 chili) | Pound, halve tomatoes, fish sauce, lime, palm sugar, Mix | Generated art (v1) |
+| r4 | Lumière Café (Dessert) | Mrs. Dubois, Chloe | Berry Macaron Tower, Strawberry / Blueberry Pancakes | Pour batter, Flip (two sides, ×2), syrup, place berries | Generated art (v1) |
+| r5 | Route 66 (American Diner) | Jess, Hank | Cheeseburger (± lettuce), French Fries (± salt) | Season, Grill (two sides), slice tomato; Peel, Cut, Fry, Salt | Generated art (v1) |
 
 All five levels are playable end to end.
 
 Ingredients carry a `kitchen` (`sushi`, `italian`, `thai`, `cafe` or `diner`) and each restaurant shows only its own, plus shared tools (Cut). Sushi: rice, salmon, tuna, nori_flat, avocado, cucumber, ikura, wasabi, ginger, soy_sauce, nori_wrap, rice_sheet + Roll. Italian: dough, tomato_sauce, mozzarella, basil, mushroom, spaghetti, parmesan + Knead, Stretch, Boil, Bake, Toss. Diner tools: Season, Grill, Fry, Peel.
 
-**r2–r5 art is mockup.** Everything in `public/assets/food/{italian,thai,cafe,diner}/` is generated SVG from `scripts/italian_mockups.py` and `scripts/more_mockups.py` (run `cd scripts && python3 italian_mockups.py && python3 more_mockups.py`). Characters still come from the sushi sheet `sushi/4.png` for every level. Replace the files with real art under the same names; plate layers share one 512×512 canvas centred on (256, 270) so toppings line up with the pizza.
+**r2–r5 art (v1)** comes from the sprite and background sheets in `art/generated/<kitchen>/` (`sprites-v1.png` plus a manifest, `backgrounds-v1.png` with the counter on top and the dining room below). `node scripts/extract_art.mjs` cuts them into `public/assets/food/<kitchen>/*.png` (and `counter.jpg` / `dining.jpg`): it drops near-invisible noise and fragments from neighbouring cells, then fits each sprite into the spot its mockup used (`art/mockup-refs/`, rendered from the SVGs), so plate layers still stack in the right place. The counter props in the generated backgrounds (macarons, papayas, rolling pin, grill tray) were drawn much larger than the food, so `COUNTER_PLAIN` keeps only the plain surface above them (mirrored downwards for the straight-plank counters so phones still get a sharp image). In the kitchen the counter picture covers only the area above the ingredient bar. Per-sprite sizing rules (`FIT`) live at the top of the script; re-run it after changing them or regenerating a sheet. **One mockup remains:** the Thai `plate.svg` (the clay mortar everything is pounded in), because the generated "plate" was a saucer. The old SVG mockups and `scripts/italian_mockups.py` / `scripts/more_mockups.py` are kept as the layout reference. Characters still come from the sushi sheet `sushi/4.png` for every level.
 
 ## Known issues / bugs
 
@@ -171,7 +171,7 @@ Ingredients carry a `kitchen` (`sushi`, `italian`, `thai`, `cafe` or `diner`) an
 
 ## Suggested next steps
 
-1. Replace the r2–r5 mockup SVGs and give each restaurant its own chef and customer sprites.
+1. Replace the Thai mortar mockup (`thai/plate.svg`, a top-down clay krok) and give each restaurant its own chef and customer sprites.
 2. Add TypeScript types for the JSON data plus a small validation script that checks every `next`, `recipeId` and ingredient id resolves.
 3. Use the existing `themeColors`.
 4. Replace the personal-use-only Avermont font before any public or commercial release.

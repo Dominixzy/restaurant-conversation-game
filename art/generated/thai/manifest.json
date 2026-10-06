@@ -1,0 +1,146 @@
+{
+  "sheet": "sprites-v1.png",
+  "columns": 5,
+  "rows": 5,
+  "coordinates": "zero-based conceptual cells; inspect boundaries before extraction",
+  "assets": {
+    "papaya.png": {
+      "row": 0,
+      "column": 0
+    },
+    "chili.png": {
+      "row": 0,
+      "column": 1
+    },
+    "chili-2.png": {
+      "row": 0,
+      "column": 2
+    },
+    "chili-3.png": {
+      "row": 0,
+      "column": 3
+    },
+    "garlic.png": {
+      "row": 0,
+      "column": 4
+    },
+    "lime.png": {
+      "row": 1,
+      "column": 0
+    },
+    "cherry-tomato.png": {
+      "row": 1,
+      "column": 1
+    },
+    "fish-sauce.png": {
+      "row": 1,
+      "column": 2
+    },
+    "palm-sugar.png": {
+      "row": 1,
+      "column": 3
+    },
+    "dried-shrimp.png": {
+      "row": 1,
+      "column": 4
+    },
+    "peanuts.png": {
+      "row": 2,
+      "column": 0
+    },
+    "salted-crab.png": {
+      "row": 2,
+      "column": 1
+    },
+    "paste-1.png": {
+      "row": 2,
+      "column": 2
+    },
+    "paste-2.png": {
+      "row": 2,
+      "column": 3
+    },
+    "paste-3.png": {
+      "row": 2,
+      "column": 4
+    },
+    "som-tam-thai.png": {
+      "row": 3,
+      "column": 0
+    },
+    "som-tam-thai-no-peanuts.png": {
+      "row": 3,
+      "column": 1
+    },
+    "som-tam-poo.png": {
+      "row": 3,
+      "column": 2
+    },
+    "plate.png": {
+      "row": 3,
+      "column": 3
+    },
+    "mat.png": {
+      "row": 3,
+      "column": 4
+    },
+    "icons/mortar.png": {
+      "row": 4,
+      "column": 0
+    },
+    "icons/spoon.png": {
+      "row": 4,
+      "column": 1
+    },
+    "icons/garlic.png": {
+      "row": 0,
+      "column": 4
+    },
+    "icons/peanuts.png": {
+      "row": 2,
+      "column": 0
+    },
+    "icons/salted-crab.png": {
+      "row": 2,
+      "column": 1
+    },
+    "icons/tomato.png": {
+      "row": 1,
+      "column": 1
+    },
+    "icons/fish-sauce.png": {
+      "row": 1,
+      "column": 2
+    },
+    "icons/lime.png": {
+      "row": 1,
+      "column": 0
+    },
+    "icons/palm-sugar.png": {
+      "row": 1,
+      "column": 3
+    },
+    "icons/dried-shrimp.png": {
+      "row": 1,
+      "column": 4
+    },
+    "icons/papaya.png": {
+      "row": 0,
+      "column": 0
+    },
+    "icons/chili.png": {
+      "row": 0,
+      "column": 1
+    }
+  },
+  "backgrounds": {
+    "counter.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "top"
+    },
+    "dining.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "bottom"
+    }
+  }
+}

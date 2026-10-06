@@ -1,0 +1,142 @@
+{
+  "sheet": "sprites-v1.png",
+  "columns": 5,
+  "rows": 5,
+  "coordinates": "zero-based conceptual cells; inspect boundaries before extraction",
+  "assets": {
+    "bun-bottom.png": {
+      "row": 0,
+      "column": 0
+    },
+    "bun-top.png": {
+      "row": 0,
+      "column": 1
+    },
+    "lettuce.png": {
+      "row": 0,
+      "column": 2
+    },
+    "tomato.png": {
+      "row": 0,
+      "column": 3
+    },
+    "cheese.png": {
+      "row": 0,
+      "column": 4
+    },
+    "patty-raw.png": {
+      "row": 1,
+      "column": 0
+    },
+    "patty-seasoned.png": {
+      "row": 1,
+      "column": 1
+    },
+    "patty.png": {
+      "row": 1,
+      "column": 2
+    },
+    "potato.png": {
+      "row": 1,
+      "column": 3
+    },
+    "potato-peeled.png": {
+      "row": 1,
+      "column": 4
+    },
+    "potato-sticks.png": {
+      "row": 2,
+      "column": 0
+    },
+    "fries.png": {
+      "row": 2,
+      "column": 1
+    },
+    "salt.png": {
+      "row": 2,
+      "column": 2
+    },
+    "final-cheeseburger.png": {
+      "row": 2,
+      "column": 3
+    },
+    "final-cheeseburger-no-lettuce.png": {
+      "row": 2,
+      "column": 4
+    },
+    "final-fries.png": {
+      "row": 3,
+      "column": 0
+    },
+    "final-fries-no-salt.png": {
+      "row": 3,
+      "column": 1
+    },
+    "plate.png": {
+      "row": 3,
+      "column": 2
+    },
+    "mat.png": {
+      "row": 3,
+      "column": 3
+    },
+    "icons/grill.png": {
+      "row": 3,
+      "column": 4
+    },
+    "icons/peeler.png": {
+      "row": 4,
+      "column": 0
+    },
+    "icons/season.png": {
+      "row": 4,
+      "column": 1
+    },
+    "icons/fryer.png": {
+      "row": 4,
+      "column": 2
+    },
+    "icons/lettuce.png": {
+      "row": 0,
+      "column": 2
+    },
+    "icons/bun-bottom.png": {
+      "row": 0,
+      "column": 0
+    },
+    "icons/bun-top.png": {
+      "row": 0,
+      "column": 1
+    },
+    "icons/cheese.png": {
+      "row": 0,
+      "column": 4
+    },
+    "icons/patty.png": {
+      "row": 1,
+      "column": 2
+    },
+    "icons/tomato.png": {
+      "row": 0,
+      "column": 3
+    },
+    "icons/salt.png": {
+      "row": 2,
+      "column": 2
+    },
+    "icons/potato.png": {
+      "row": 1,
+      "column": 3
+    }
+  },
+  "backgrounds": {
+    "counter.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "top"
+    },
+    "dining.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "bottom"
+    }
+  }
+}

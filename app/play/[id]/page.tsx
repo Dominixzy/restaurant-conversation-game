@@ -230,7 +230,8 @@ export default function PlayScreen() {
 
         {/* Prep counter, seen from above */}
         <div className="relative flex-1 min-h-0">
-          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${scene.counter}')` }} />
+          {/* Sized to the part above the ingredient bar, so the bar doesn't hide the counter's props */}
+          <div className="absolute inset-x-0 top-0 bottom-40 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${scene.counter}')` }} />
           <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black/45 to-transparent pointer-events-none" />
 
           {/* Undo / Discard / Serve, at the right edge of the counter */}

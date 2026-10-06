@@ -546,7 +546,7 @@ function Stir({ ctx, p }: { ctx: Ctx<Of<"stir">>; p: number }) {
         <div style={{ ...box(50, H / 2 + 2, 42), opacity: p, transform: `scale(${1.25 - p * 0.25})` }} className={ctx.icon ?? ""} />
       )}
       {anim.look === "stir" || !anim.look
-        ? <div className="absolute w-[16%] aspect-square bg-[url('/assets/food/thai/icons/spoon.svg')] bg-contain bg-no-repeat" style={{ ...at(hand.x, hand.y), translate: "-50% -70%" }} />
+        ? <div className="absolute w-[16%] aspect-square bg-[url('/assets/food/thai/icons/spoon.png')] bg-contain bg-no-repeat" style={{ ...at(hand.x, hand.y), translate: "-50% -70%" }} />
         : <div className="absolute w-[11%] aspect-square rounded-full bg-[#f2c9a0] border-4 border-stone-700" style={{ ...at(hand.x, hand.y), translate: "-50% -50%" }} />}
     </Stage>
   );
@@ -593,7 +593,7 @@ function Stretch({ ctx, p }: { ctx: Ctx<Of<"stretch">>; p: number }) {
         className="absolute drop-shadow-[0_6px_6px_rgba(0,0,0,0.35)]"
         style={{ left: `${50 - width / 2}%`, top: `${((CENTRE.y - (DOUGH.cy / 512) * width) / H) * 100}%`, width: `${width}%` }}
       />
-      {p < 1 && <div className="absolute w-[50%] aspect-[2/1] bg-[url('/assets/food/italian/icons/rolling-pin.svg')] bg-contain bg-center bg-no-repeat drop-shadow-lg" style={{ ...at(pinX, CENTRE.y), translate: "-50% -50%", rotate: "70deg" }} />}
+      {p < 1 && <div className="absolute w-[50%] aspect-[2/1] bg-[url('/assets/food/italian/icons/rolling-pin.png')] bg-contain bg-center bg-no-repeat drop-shadow-lg" style={{ ...at(pinX, CENTRE.y), translate: "-50% -50%", rotate: "70deg" }} />}
     </Stage>
   );
 }

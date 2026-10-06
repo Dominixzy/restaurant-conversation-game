@@ -1,0 +1,142 @@
+{
+  "sheet": "sprites-v1.png",
+  "columns": 5,
+  "rows": 5,
+  "coordinates": "zero-based conceptual cells; inspect boundaries before extraction",
+  "assets": {
+    "dough-ball.png": {
+      "row": 0,
+      "column": 0
+    },
+    "dough.png": {
+      "row": 0,
+      "column": 1
+    },
+    "sauce-puddle.png": {
+      "row": 0,
+      "column": 2
+    },
+    "mozzarella.png": {
+      "row": 0,
+      "column": 3
+    },
+    "mushroom.png": {
+      "row": 0,
+      "column": 4
+    },
+    "basil.png": {
+      "row": 1,
+      "column": 0
+    },
+    "parmesan.png": {
+      "row": 1,
+      "column": 1
+    },
+    "spaghetti-dry.png": {
+      "row": 1,
+      "column": 2
+    },
+    "spaghetti.png": {
+      "row": 1,
+      "column": 3
+    },
+    "pasta-sauced.png": {
+      "row": 1,
+      "column": 4
+    },
+    "pizza-sauced.png": {
+      "row": 2,
+      "column": 0
+    },
+    "pizza-margherita.png": {
+      "row": 2,
+      "column": 1
+    },
+    "pizza-margherita-cut.png": {
+      "row": 2,
+      "column": 2
+    },
+    "pizza-funghi.png": {
+      "row": 2,
+      "column": 3
+    },
+    "pizza-funghi-cut.png": {
+      "row": 2,
+      "column": 4
+    },
+    "spaghetti-pomodoro.png": {
+      "row": 3,
+      "column": 0
+    },
+    "spaghetti-parmesan.png": {
+      "row": 3,
+      "column": 1
+    },
+    "board.png": {
+      "row": 3,
+      "column": 2
+    },
+    "cloth.png": {
+      "row": 3,
+      "column": 3
+    },
+    "icons/rolling-pin.png": {
+      "row": 3,
+      "column": 4
+    },
+    "icons/oven.png": {
+      "row": 4,
+      "column": 0
+    },
+    "icons/pot.png": {
+      "row": 4,
+      "column": 1
+    },
+    "icons/knead.png": {
+      "row": 4,
+      "column": 2
+    },
+    "icons/toss.png": {
+      "row": 4,
+      "column": 3
+    },
+    "icons/sauce.png": {
+      "row": 0,
+      "column": 2
+    },
+    "icons/dough.png": {
+      "row": 0,
+      "column": 1
+    },
+    "icons/parmesan.png": {
+      "row": 1,
+      "column": 1
+    },
+    "icons/spaghetti.png": {
+      "row": 1,
+      "column": 3
+    },
+    "icons/basil.png": {
+      "row": 1,
+      "column": 0
+    },
+    "icons/mushroom.png": {
+      "row": 0,
+      "column": 4
+    },
+    "icons/mozzarella.png": {
+      "row": 0,
+      "column": 3
+    }
+  },
+  "backgrounds": {
+    "counter.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "top"
+    },
+    "dining.png": {
+      "sheet": "backgrounds-v1.png",
+      "panel": "bottom"
+    }
+  }
+}
